@@ -1,0 +1,45 @@
+
+
+
+machine Fork {
+    var holder: machine;
+    var holder_id: int;
+    
+    start state available {
+        entry {
+            holder = null;
+            holder_id = -1;
+        }
+
+        on eAcquireFork do (info: (philosopher: machine, philo_id: int)) {
+            holder = info.philosopher;
+            holder_id = info.philo_id;
+            send info.philosopher, eForkAcquired;
+            goto taken;
+        }
+
+        on eReleaseFork do (philo_id: int) {
+            // Fork is available, ignore the release request
+            print format("Fork is already available, cannot release by {0}", philo_id);
+       
+        }
+    }
+    
+    state taken {
+       
+        on eReleaseFork do (philo_id: int) {
+            assert philo_id == holder_id, format("Only holder can release fork");
+            holder = null;
+            holder_id = -1;
+            goto available;
+        }
+
+        on eAcquireFork do (info: (philosopher: machine, philo_id: int)) {
+            // Fork is already taken, ignore the request
+            
+            
+            print format("Fork is already taken by philosopher {0}, cannot acquire by {1}", holder_id, info.philo_id);
+        
+        }
+    }
+}
