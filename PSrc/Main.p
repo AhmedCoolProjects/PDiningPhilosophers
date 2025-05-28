@@ -10,13 +10,14 @@ machine Main {
     start state Init {
         entry {
             var i: int;
+            var j: int;
             numPhilosophers = 5;
             
             // Create 5 forks
-            i = 0;
-            while (i < numPhilosophers) {
+            j = 0;
+            while (j < numPhilosophers) {
                 forks += (0, new Fork());
-                i = i + 1;
+                j = j + 1;
             }
             
             // Create 5 philosophers

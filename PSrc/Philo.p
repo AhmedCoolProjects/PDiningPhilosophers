@@ -3,7 +3,7 @@ event eAcquireFork: (philosopher: machine, philo_id: int);
 event eReleaseFork: int; // philo id
 event eForkAcquired;
 event eBothForksAcquired;
-
+event eForkBusy: (fork: machine, philo_id: int);
 
 
 machine Philo {
@@ -47,6 +47,12 @@ machine Philo {
                 print format("Philosopher {0} acquired both forks", philosopher_id);
                 goto eating;
             }
+        }
+
+        on eForkBusy do (info: (fork: machine, philo_id: int)) {
+            print format("Philosopher {0} fork busy, retrying...", philosopher_id);
+            // Retry acquiring the left fork
+            send left_fork, eAcquireFork, (philosopher = this, philo_id = philosopher_id);
         }
     }
 

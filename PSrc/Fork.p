@@ -35,11 +35,8 @@ machine Fork {
         }
 
         on eAcquireFork do (info: (philosopher: machine, philo_id: int)) {
-            // Fork is already taken, ignore the request
-            
-            
-            print format("Fork is already taken by philosopher {0}, cannot acquire by {1}", holder_id, info.philo_id);
-        
+            // Send a delayed retry message to the philosopher
+            send info.philosopher, eForkBusy, (fork = this, philo_id = info.philo_id);
         }
     }
 }

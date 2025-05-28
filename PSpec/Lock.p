@@ -16,7 +16,9 @@ spec DeadlockDetection observes eAcquireFork, eReleaseFork {
             // assert false, "FALSE LLLLLL";
             
             // If we have too many requests without any releases, potential deadlock
+            print format("Activity detected: {0} requests since last release", requestsSinceLastRelease);
             assert requestsSinceLastRelease <= 10, "Hard deadlock: too many fork requests without releases";
+
         }
         
         on eReleaseFork do {
