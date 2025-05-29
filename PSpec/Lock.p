@@ -1,30 +1,23 @@
-
-
-spec DeadlockDetection observes eAcquireFork, eReleaseFork {
-    var lastActivity: int; // Simple counter to track activity
-    var requestsSinceLastRelease: int;
+spec DeadlockDetection observes eForkAcquired, eReleaseFork {
+    var totalAcquires: int;
     
     start state Monitoring {
         entry { 
-            lastActivity = 0;
-            requestsSinceLastRelease = 0;
+            totalAcquires = 0;
         }
         
-        on eAcquireFork do {
-            requestsSinceLastRelease = requestsSinceLastRelease + 1;
+        on eForkAcquired do {
+            totalAcquires = totalAcquires + 1;
 
-            // assert false, "FALSE LLLLLL";
-            
-            // If we have too many requests without any releases, potential deadlock
-            print format("Activity detected: {0} requests since last release", requestsSinceLastRelease);
-            assert requestsSinceLastRelease <= 10, "Hard deadlock: too many fork requests without releases";
-
+            // Print the current number of fork acquisitions
+            print format("Total fork acquisitions: {0}", totalAcquires);
+            assert totalAcquires < 5, "Too many fork acquisitions, potential deadlock";
         }
-        
+
         on eReleaseFork do {
-            // Reset counter when someone releases a fork (progress made)
-            requestsSinceLastRelease = 0;
-            lastActivity = lastActivity + 1;
+            totalAcquires = totalAcquires - 1;
+            // Print the current number of fork acquisitions after release
+            print format("Total fork acquisitions after release: {0}", totalAcquires);
         }
     }
 }
