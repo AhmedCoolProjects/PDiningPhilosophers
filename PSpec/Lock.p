@@ -1,8 +1,9 @@
-spec DeadlockDetection observes eForkAcquired, eReleaseFork, ePhiloReady, eLetsEat {
+spec DeadlockDetection observes eForkAcquired, eAcquireFork, eReleaseFork, ePhiloReady, eLetsEat, eStopEating {
     var totalAcquires: int;
     var howManyPhilosophers: int;
     var totalAcquiresAfterPhilosophers: int;
     var eatingCounter: int;
+    var totalAcquiresBeforeDeadLock: int;
     
     start state Monitoring {
         entry { 
@@ -10,10 +11,20 @@ spec DeadlockDetection observes eForkAcquired, eReleaseFork, ePhiloReady, eLetsE
             howManyPhilosophers = 0;
             totalAcquiresAfterPhilosophers = 0;
             eatingCounter = 0;
+            totalAcquiresBeforeDeadLock = 0;
         }
 
         on eLetsEat do {
             eatingCounter = eatingCounter + 1;
+        }
+
+        on eAcquireFork do {
+            if ( totalAcquires - 2 * eatingCounter == 5) {
+                totalAcquiresBeforeDeadLock = totalAcquiresBeforeDeadLock + 1;
+
+            } else {
+                totalAcquiresBeforeDeadLock = 0;
+            }
         }
 
         on eForkAcquired do {
@@ -27,13 +38,18 @@ spec DeadlockDetection observes eForkAcquired, eReleaseFork, ePhiloReady, eLetsE
             print format("Total fork acquisitions: {0}", totalAcquires);
             // TODO
             if (howManyPhilosophers == 5) {
-                 assert totalAcquires - 2 * eatingCounter < 5, "Too many fork acquisitions, potential deadlock";
+                print format("How many philosophers: {0} and eatingCounter: {1}", howManyPhilosophers, eatingCounter);
+                if ( totalAcquires - 2 * eatingCounter == 5) {
+                    
+                    if (totalAcquiresBeforeDeadLock == 2) {
+                        assert totalAcquires - 2 * eatingCounter < 5, "Too many fork acquisitions, potential deadlock";
+                    } 
+                }
             }
         }
 
         on eReleaseFork do {
             totalAcquires = totalAcquires - 1;
-            eatingCounter = eatingCounter - 1;
             if (howManyPhilosophers == 5) {
                 totalAcquiresAfterPhilosophers = totalAcquiresAfterPhilosophers - 1;
             }
@@ -45,6 +61,10 @@ spec DeadlockDetection observes eForkAcquired, eReleaseFork, ePhiloReady, eLetsE
             howManyPhilosophers = howManyPhilosophers + 1;
             // print format("Philosopher {0} is ready", howManyPhilosophers);
             assert howManyPhilosophers <= 5, "More philosophers than expected, potential deadlock";
+        }
+
+        on eStopEating do {
+            eatingCounter = eatingCounter - 1;
         }
     }
 }

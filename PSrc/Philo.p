@@ -65,13 +65,15 @@ machine Philo {
             // the philosopher got a fork, let's check if he can eat
             acquireCounter = acquireCounter + 1;
             if (acquireCounter == 1) {
-               
+               print format("Philo {0} ASKING for second FORK with counter {1}", id, acquireCounter);
                 if (isException) {
                     send left.m, eAcquireFork, (philo = _philo, fork = left);
                 } else {
                     send right.m, eAcquireFork, (philo = _philo, fork = right);
                 }
-            } else if (acquireCounter == 2) {
+            } 
+            if (acquireCounter == 2) {
+                print format("Philo {0} GOT both FORKS {1} and {2}, ready to eat with counter {3}", id, left.id, right.id, acquireCounter);
                 send this, eLetsEat;
             }
         }
@@ -114,7 +116,11 @@ machine Philo {
             acquireCounter = 0;
             print format("Philosopher {0} released forks: left {1} and right {2}, now thinking again", 
                          id, left.id, right.id);
-            goto thinking;
+            send this, eStopEating;
+        }
+
+        on eStopEating do {
+            goto thinking; // Go back to thinking state after eating
         }
     }
 }

@@ -1,19 +1,18 @@
-Total event coverage: 41.7%
+Total event coverage: 93.3%
 ===========================
 Monitor: DeadlockDetection
 ==========================
-Event coverage: 50.0%
+Event coverage: 100.0%
 
 	State: Monitoring
-		State event coverage: 50.0%
-		Events received: eForkAcquired, ePhiloReady
-		Events not covered: eLetsEat, eReleaseFork
+		State event coverage: 100.0%
+		Events received: eAcquireFork, eForkAcquired, eLetsEat, ePhiloReady, eReleaseFork, eStopEating
 		Previous states: Monitoring
 		Next states: Monitoring
 
 StateMachine: Fork
 ==================
-Event coverage: 25.0%
+Event coverage: 75.0%
 
 	State: Init
 		State has no expected events, so coverage is 100%
@@ -24,12 +23,15 @@ Event coverage: 25.0%
 		Events received: eAcquireFork
 		Events sent: eForkAcquired
 		Events not covered: eReleaseFork
-		Previous states: Init
+		Previous states: Init, taken
 		Next states: taken
 
-	State: taken is uncovered
-		Events not covered: eAcquireFork, eReleaseFork
+	State: taken
+		State event coverage: 100.0%
+		Events received: eAcquireFork, eReleaseFork
+		Events sent: eForkBusy
 		Previous states: available
+		Next states: available
 
 StateMachine: Main
 ==================
@@ -40,7 +42,7 @@ Event coverage: 100.0%
 
 StateMachine: Philo
 ===================
-Event coverage: 50.0%
+Event coverage: 100.0%
 
 	State: Init
 		State has no expected events, so coverage is 100%
@@ -50,17 +52,20 @@ Event coverage: 50.0%
 		State event coverage: 100.0%
 		Events received: ePhiloReady
 		Events sent: ePhiloReady
-		Previous states: thinking
-		Next states: thinking
+		Previous states: philoReady, thinking
+		Next states: philoReady, thinking
 
 	State: thinking
-		State event coverage: 33.3%
-		Events received: eForkAcquired
-		Events sent: eAcquireFork
-		Events not covered: eForkBusy, eLetsEat
-		Previous states: Init, philoReady
-		Next states: philoReady
+		State event coverage: 100.0%
+		Events received: eForkAcquired, eForkBusy, eLetsEat
+		Events sent: eAcquireFork, eLetsEat
+		Previous states: Init, eating, philoReady, thinking
+		Next states: eating, philoReady, thinking
 
 	State: eating
-		State has no expected events, so coverage is 100%
+		State event coverage: 100.0%
+		Events received: eStopEating
+		Events sent: eReleaseFork, eStopEating
+		Previous states: eating, thinking
+		Next states: eating, thinking
 

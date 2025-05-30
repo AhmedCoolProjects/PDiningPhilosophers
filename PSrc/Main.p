@@ -10,9 +10,9 @@ event eForkBusy: (philo: tPhilo, fork: tFork);
 // 
 event eReleaseFork: (philo: tPhilo, fork: tFork);
 event eForkAcquired;
-event eBothForksAcquired;
 event ePhiloReady;
 event eLetsEat;
+event eStopEating;
     
 
 machine Main {
@@ -30,7 +30,7 @@ machine Main {
         entry {
             var i: int;
             numPhilosophers = 5;
-            withException = false;
+            withException = true;
 
             // Create 5 forks
             i = 0;
