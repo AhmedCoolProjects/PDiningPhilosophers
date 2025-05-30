@@ -5,49 +5,43 @@ machine Fork {
     
 
     start state Init {
-        entry (input: (id: int, id_one: int)) { // this id_one has no since, but i use it because idk how to use the input with just one variable, it keeps throwing errors
+        entry (input: int) { 
             holder = null;
             holder_id = -1;
-            id = input.id;
-            print format("Fork {0} initialized", input.id);
+            id = input;
+            print format("Fork {0} initialized", input);
             goto available;
         }
     }
     
     state available {
-        entry {
-            print format("Fork {0} is available", id);
-        }
 
-        on eAcquireFork do (info: (philosopher: machine, philo_id: int)) {
-            holder = info.philosopher;
-            holder_id = info.philo_id;
-            send info.philosopher, eForkAcquired;
-            print format("Fork {0} acquired by philosopher {1}", id, holder_id);
+        on eAcquireFork do (info: (philo: tPhilo, fork: tFork)) {
+            assert info.fork.id == id, format("Fork id mismatch: expected {0}, got {1}", id, info.fork.id);
+            holder = info.philo.m;
+            holder_id = info.philo.id;
+            print format("Philosopher {0} GOT fork {1}", holder_id, id);
+            send info.philo.m, eForkAcquired;
             goto taken;
         }
 
-        on eReleaseFork do (philo_id: int) {
-            // Fork is available, ignore the release request
-            print format("Fork {0} is already available, cannot release by {1}", id, philo_id);
-
+        on eReleaseFork do (info: (philo: tPhilo, fork: tFork)) {
+            print format("You CAN NOT release an available fork {0} by philosopher {1}", id, info.philo.id);
         }
     }
     
     state taken {
-       
-        on eReleaseFork do (philo_id: int) {
-            assert philo_id == holder_id, format("Only holder can release fork");
-            print format("Fork {0} released by philosopher {1}", id, philo_id);
+
+        on eReleaseFork do (info: (philo: tPhilo, fork: tFork)) {
+            assert info.philo.id == holder_id, format("Only holder can release fork");
             holder = null;
             holder_id = -1;
             goto available;
         }
 
-        on eAcquireFork do (info: (philosopher: machine, philo_id: int)) {
-            // Send a delayed retry message to the philosopher
-            print format("Fork {0} is busy by philosopher {1}, philosopher {2} cannot acquire it", id, holder_id, info.philo_id);
-            send info.philosopher, eForkBusy, (fork = this, philo_id = holder_id, fork_id = id);
+        on eAcquireFork do (info: (philo: tPhilo, fork: tFork)) {
+            assert info.fork.id == id, format("Fork id mismatch: expected {0}, got {1}", id, info.fork.id);
+            send info.philo.m, eForkBusy, (philo=info.philo, fork=info.fork);
         }
     }
 }

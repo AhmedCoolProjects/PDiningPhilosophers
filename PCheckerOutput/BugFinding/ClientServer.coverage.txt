@@ -1,18 +1,19 @@
-Total event coverage: 87.5%
+Total event coverage: 41.7%
 ===========================
 Monitor: DeadlockDetection
 ==========================
-Event coverage: 100.0%
+Event coverage: 50.0%
 
 	State: Monitoring
-		State event coverage: 100.0%
-		Events received: eForkAcquired, eReleaseFork
+		State event coverage: 50.0%
+		Events received: eForkAcquired, ePhiloReady
+		Events not covered: eLetsEat, eReleaseFork
 		Previous states: Monitoring
 		Next states: Monitoring
 
 StateMachine: Fork
 ==================
-Event coverage: 75.0%
+Event coverage: 25.0%
 
 	State: Init
 		State has no expected events, so coverage is 100%
@@ -23,15 +24,12 @@ Event coverage: 75.0%
 		Events received: eAcquireFork
 		Events sent: eForkAcquired
 		Events not covered: eReleaseFork
-		Previous states: Init, taken
+		Previous states: Init
 		Next states: taken
 
-	State: taken
-		State event coverage: 100.0%
-		Events received: eAcquireFork, eReleaseFork
-		Events sent: eForkBusy
+	State: taken is uncovered
+		Events not covered: eAcquireFork, eReleaseFork
 		Previous states: available
-		Next states: available
 
 StateMachine: Main
 ==================
@@ -42,22 +40,27 @@ Event coverage: 100.0%
 
 StateMachine: Philo
 ===================
-Event coverage: 100.0%
+Event coverage: 50.0%
 
 	State: Init
 		State has no expected events, so coverage is 100%
 		Next states: thinking
 
-	State: thinking
+	State: philoReady
 		State event coverage: 100.0%
-		Events received: eForkAcquired, eForkBusy
+		Events received: ePhiloReady
+		Events sent: ePhiloReady
+		Previous states: thinking
+		Next states: thinking
+
+	State: thinking
+		State event coverage: 33.3%
+		Events received: eForkAcquired
 		Events sent: eAcquireFork
-		Previous states: Init, eating
-		Next states: eating
+		Events not covered: eForkBusy, eLetsEat
+		Previous states: Init, philoReady
+		Next states: philoReady
 
 	State: eating
 		State has no expected events, so coverage is 100%
-		Events sent: eReleaseFork
-		Previous states: thinking
-		Next states: thinking
 

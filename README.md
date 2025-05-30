@@ -203,3 +203,7 @@ _This project serves as an educational example of how formal verification can de
 ```
 
 ```
+
+![alt text](image-1.png)
+
+Mismatch between Fork order and id

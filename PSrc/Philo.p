@@ -1,93 +1,104 @@
-// Event declarations
-event eAcquireFork: (philosopher: machine, philo_id: int);
-event eReleaseFork: int; // philo id
-event eForkAcquired;
-event eBothForksAcquired;
-event eForkBusy: (fork: machine, philo_id: int, fork_id: int);
-
 
 machine Philo {
-    var left_fork: machine;
-    var right_fork: machine;
-    var left_fork_id: int;
-    var right_fork_id: int;
-    var philosopher_id: int;
-    var forks_acquired: int;
+    var id: int;
+    var left: tFork;
+    var right: tFork;
+    // 
     var isException: bool;
+    var counterPhiloCreated: int;
+    var acquireCounter: int;
+    var _philo: tPhilo;
+
     
     start state Init {
-      
-        entry (input: (id: int, left: machine, right: machine, isException: bool, left_id: int, right_id: int)) {
-            philosopher_id = input.id;
-            // forks
-            left_fork = input.left;
-            right_fork = input.right;
-            left_fork_id = input.left_id;
-            right_fork_id = input.right_id;
-            // one philosopher may be the exception
+
+        entry (input: tPhilo) {
+            _philo = input;
+            _philo.m = this; // Set the machine reference for the philosopher
+
+            id = input.id;
+            left = input.left;
+            right = input.right;
             isException = input.isException;
-            // how many forks i have
-            forks_acquired = 0;
+            counterPhiloCreated = 0;
+            acquireCounter = 0;
 
             // Start thinking
-            print format("Philosopher {0}: left fork {1} and right fork {2}", philosopher_id, left_fork_id, right_fork_id);
+            print format("Philosopher {0}: left {1} and right {2}", id, left.id, right.id);
             goto thinking;
         }
     }
 
+    state philoReady {
+        entry {
+            print format("Philosopher {0} is READY", id);
+            counterPhiloCreated = counterPhiloCreated + 1;
+            send this, ePhiloReady; // Notify that the philosopher is ready
+
+        }
+
+        on ePhiloReady do {
+            goto thinking; // Go to thinking state after being ready
+        }
+
+        
+    }
+
+
     state thinking {
        
         entry {
-            // Check if this is the first attempt and should be skipped
-            if (isException) {
-                print format("Philosopher {0} is the Exception", philosopher_id);
-                // acquire the right fork first
-                send right_fork, eAcquireFork, (philosopher = this, philo_id = philosopher_id);
-            } else {
-                send left_fork, eAcquireFork, (philosopher = this, philo_id = philosopher_id);
+            if (counterPhiloCreated == 0) {
+                goto philoReady;
             }
+
+            if (isException) {
+                print format("Philosopher {0} is the Exception", id);
+                send right.m, eAcquireFork, (philo = _philo, fork = right);
+            } else {
+                send left.m, eAcquireFork, (philo = _philo, fork = left);
+            }
+ 
         }
 
         on eForkAcquired do {
             // the philosopher got a fork, let's check if he can eat
-            forks_acquired = forks_acquired + 1;
-            if (forks_acquired == 1) {
-                // philosopher still needs another fork, let's try to get the right fork
+            acquireCounter = acquireCounter + 1;
+            if (acquireCounter == 1) {
+               
                 if (isException) {
-                    print format("Philosopher {0} is GOT his right fork {1}, now trying for left fork {2}", philosopher_id, right_fork_id, left_fork_id);   
-                    // Request left fork
-                    send left_fork, eAcquireFork, (philosopher = this, philo_id = philosopher_id);
+                    send left.m, eAcquireFork, (philo = _philo, fork = left);
                 } else {
-                    print format("Philosopher {0} is GOT his left fork {1}, now trying for right fork {2}", philosopher_id, left_fork_id, right_fork_id);
-                    // Request right fork
-                    send right_fork, eAcquireFork, (philosopher = this, philo_id = philosopher_id);
+                    send right.m, eAcquireFork, (philo = _philo, fork = right);
                 }
-            } else if (forks_acquired == 2) {
-                print format("Philosopher {0} acquired both forks: left {1} and right {2}, starting to eat", 
-                             philosopher_id, left_fork_id, right_fork_id);
-                goto eating;
+            } else if (acquireCounter == 2) {
+                send this, eLetsEat;
             }
         }
 
-        on eForkBusy do (info: (fork: machine, philo_id: int, fork_id: int)) {
-            print format("Philosopher {0} could not acquire fork {1} (held by philosopher {2}), retrying...", 
-                         philosopher_id, info.fork_id, info.philo_id);
-            // let's retry acquiring the left fork if it was the first attempt
+        on eLetsEat do {
+            goto eating;
+        }
+
+        on eForkBusy do (info: (philo: tPhilo, fork: tFork)) {
+            print format("Philosopher {0} CAN NOT take {1} (held by philosopher {2}), retrying...", 
+                         id, info.fork.id, info.philo.id);
             if (isException) {
-                if (info.fork_id == right_fork_id) {
+                if (info.fork.id == right.id) {
                     // then the philosopher is waiting for right fork
-                    send right_fork, eAcquireFork, (philosopher = this, philo_id = philosopher_id);
+                    send right.m, eAcquireFork, (philo = _philo, fork = right);
                 } else {
+                    print format("Philosopher {0} oh EXCEPTION, for left fork {1}, retrying...", id, left.id);
                     // otherwise, retry acquiring the left fork
-                    send left_fork, eAcquireFork, (philosopher = this, philo_id = philosopher_id);
+                    send left.m, eAcquireFork, (philo = _philo, fork = left);
                 }
             } else {
-                if (info.fork_id == left_fork_id) {
+                if (info.fork.id == left.id) {
                     // then the philosopher is waiting for left fork
-                    send left_fork, eAcquireFork, (philosopher = this, philo_id = philosopher_id);
+                    send left.m, eAcquireFork, (philo = _philo, fork = left);
                 } else {
                     // otherwise, retry acquiring the right fork
-                    send right_fork, eAcquireFork, (philosopher = this, philo_id = philosopher_id);
+                    send right.m, eAcquireFork, (philo = _philo, fork = right);
                 }
             }
         }
@@ -96,13 +107,13 @@ machine Philo {
     state eating {
         entry {
             print format("Philosopher {0} is eating with forks: left {1} and right {2}", 
-                         philosopher_id, left_fork_id, right_fork_id);
+                         id, left.id, right.id);
             // Reset forks acquired count
-            send left_fork, eReleaseFork, philosopher_id;
-            send right_fork, eReleaseFork, philosopher_id;
-            forks_acquired = 0;
+            send left.m, eReleaseFork, (philo = _philo, fork = left);
+            send right.m, eReleaseFork, (philo = _philo, fork = right);
+            acquireCounter = 0;
             print format("Philosopher {0} released forks: left {1} and right {2}, now thinking again", 
-                         philosopher_id, left_fork_id, right_fork_id);
+                         id, left.id, right.id);
             goto thinking;
         }
     }

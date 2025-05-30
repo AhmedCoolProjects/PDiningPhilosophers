@@ -120,13 +120,6 @@
     }
   },
   {
-    "type": "Print",
-    "details": {
-      "log": "Fork 0 is available",
-      "payload": "null"
-    }
-  },
-  {
     "type": "CreateStateMachine",
     "details": {
       "log": "Fork(3) was created by Main(1).",
@@ -199,13 +192,6 @@
     }
   },
   {
-    "type": "Print",
-    "details": {
-      "log": "Fork 1 is available",
-      "payload": "null"
-    }
-  },
-  {
     "type": "CreateStateMachine",
     "details": {
       "log": "Fork(4) was created by Main(1).",
@@ -215,6 +201,19 @@
       "payload": "null",
       "clock": {
         "Fork(4)": 1
+      }
+    }
+  },
+  {
+    "type": "CreateStateMachine",
+    "details": {
+      "log": "Fork(5) was created by Main(1).",
+      "id": "Fork(5)",
+      "creatorName": "Main(1)",
+      "creatorType": "Main",
+      "payload": "null",
+      "clock": {
+        "Fork(5)": 1
       }
     }
   },
@@ -278,26 +277,6 @@
     }
   },
   {
-    "type": "Print",
-    "details": {
-      "log": "Fork 2 is available",
-      "payload": "null"
-    }
-  },
-  {
-    "type": "CreateStateMachine",
-    "details": {
-      "log": "Fork(5) was created by Main(1).",
-      "id": "Fork(5)",
-      "creatorName": "Main(1)",
-      "creatorType": "Main",
-      "payload": "null",
-      "clock": {
-        "Fork(5)": 1
-      }
-    }
-  },
-  {
     "type": "StateTransition",
     "details": {
       "log": "Fork(5) enters state \u0027Init\u0027.",
@@ -354,13 +333,6 @@
       "clock": {
         "Fork(5)": 5
       }
-    }
-  },
-  {
-    "type": "Print",
-    "details": {
-      "log": "Fork 3 is available",
-      "payload": "null"
     }
   },
   {
@@ -436,13 +408,6 @@
     }
   },
   {
-    "type": "Print",
-    "details": {
-      "log": "Fork 4 is available",
-      "payload": "null"
-    }
-  },
-  {
     "type": "CreateStateMachine",
     "details": {
       "log": "Philo(7) was created by Main(1).",
@@ -452,19 +417,6 @@
       "payload": "null",
       "clock": {
         "Philo(7)": 1
-      }
-    }
-  },
-  {
-    "type": "CreateStateMachine",
-    "details": {
-      "log": "Philo(8) was created by Main(1).",
-      "id": "Philo(8)",
-      "creatorName": "Main(1)",
-      "creatorType": "Main",
-      "payload": "null",
-      "clock": {
-        "Philo(8)": 1
       }
     }
   },
@@ -484,7 +436,7 @@
   {
     "type": "Print",
     "details": {
-      "log": "Philosopher 0: left fork 0 and right fork 1",
+      "log": "Philosopher 0: left 0 and right 1",
       "payload": "null"
     }
   },
@@ -528,250 +480,91 @@
     }
   },
   {
-    "type": "SendEvent",
+    "type": "GotoState",
     "details": {
-      "log": "\u0027Philo(7)\u0027 in state \u0027thinking\u0027 sent event \u0027eAcquireFork with payload (\u003Cphilosopher:Philo(7), philo_id:0, \u003E)\u0027 to \u0027Fork(6)\u0027.",
-      "event": "eAcquireFork",
-      "state": "thinking",
-      "payload": {
-        "philosopher": "Philo(7)",
-        "philo_id": 0
-      },
-      "sender": "Philo(7)",
-      "target": "Fork(6)",
-      "isTargetHalted": false,
+      "log": "Philo(7) is transitioning from state \u0027thinking\u0027 to state \u0027philoReady\u0027.",
+      "id": "Philo(7)",
+      "startState": "thinking",
+      "endState": "philoReady",
+      "payload": "null",
       "clock": {
         "Philo(7)": 6
       }
     }
   },
   {
-    "type": "DequeueEvent",
+    "type": "StateTransition",
     "details": {
-      "log": "\u0027Fork(6)\u0027 dequeued event \u0027eAcquireFork with payload (\u003Cphilosopher:Philo(7), philo_id:0, \u003E)\u0027 in state \u0027available\u0027.",
-      "id": "Fork(6)",
-      "event": "eAcquireFork",
-      "state": "available",
-      "payload": {
-        "philosopher": "Philo(7)",
-        "philo_id": 0
-      },
+      "log": "Philo(7) exits state \u0027thinking\u0027.",
+      "id": "Philo(7)",
+      "state": "thinking",
+      "payload": "null",
+      "isEntry": false,
       "clock": {
-        "Fork(6)": 6,
-        "Philo(7)": 6
+        "Philo(7)": 7
       }
+    }
+  },
+  {
+    "type": "StateTransition",
+    "details": {
+      "log": "Philo(7) enters state \u0027philoReady\u0027.",
+      "id": "Philo(7)",
+      "state": "philoReady",
+      "payload": "null",
+      "isEntry": true,
+      "clock": {
+        "Philo(7)": 8
+      }
+    }
+  },
+  {
+    "type": "Print",
+    "details": {
+      "log": "Philosopher 0 is READY",
+      "payload": "null"
     }
   },
   {
     "type": "MonitorProcessEvent",
     "details": {
-      "log": "DeadlockDetection is processing event \u0027eForkAcquired\u0027 in state \u0027Monitoring\u0027.",
-      "event": "eForkAcquired",
+      "log": "DeadlockDetection is processing event \u0027ePhiloReady\u0027 in state \u0027Monitoring\u0027.",
+      "event": "ePhiloReady",
       "state": "Monitoring",
       "payload": "null",
-      "sender": "Fork(6)",
+      "sender": "Philo(7)",
       "monitor": "DeadlockDetection",
       "clock": {
         "DeadlockDetection": 3,
-        "Fork(6)": 6,
-        "Philo(7)": 6
+        "Philo(7)": 8
       }
-    }
-  },
-  {
-    "type": "Print",
-    "details": {
-      "log": "Total fork acquisitions: 1",
-      "payload": "null"
     }
   },
   {
     "type": "CreateStateMachine",
     "details": {
-      "log": "Philo(9) was created by Main(1).",
-      "id": "Philo(9)",
+      "log": "Philo(8) was created by Main(1).",
+      "id": "Philo(8)",
       "creatorName": "Main(1)",
       "creatorType": "Main",
       "payload": "null",
       "clock": {
-        "Philo(9)": 1
+        "Philo(8)": 1
       }
     }
   },
   {
     "type": "SendEvent",
     "details": {
-      "log": "\u0027Fork(6)\u0027 in state \u0027available\u0027 sent event \u0027eForkAcquired\u0027 to \u0027Philo(7)\u0027.",
-      "event": "eForkAcquired",
-      "state": "available",
+      "log": "\u0027Philo(7)\u0027 in state \u0027philoReady\u0027 sent event \u0027ePhiloReady\u0027 to \u0027Philo(7)\u0027.",
+      "event": "ePhiloReady",
+      "state": "philoReady",
       "payload": "null",
-      "sender": "Fork(6)",
+      "sender": "Philo(7)",
       "target": "Philo(7)",
       "isTargetHalted": false,
       "clock": {
-        "Fork(6)": 7,
-        "Philo(7)": 6
-      }
-    }
-  },
-  {
-    "type": "Print",
-    "details": {
-      "log": "Fork 4 acquired by philosopher 0",
-      "payload": "null"
-    }
-  },
-  {
-    "type": "GotoState",
-    "details": {
-      "log": "Fork(6) is transitioning from state \u0027available\u0027 to state \u0027taken\u0027.",
-      "id": "Fork(6)",
-      "startState": "available",
-      "endState": "taken",
-      "payload": "null",
-      "clock": {
-        "Fork(6)": 8,
-        "Philo(7)": 6
-      }
-    }
-  },
-  {
-    "type": "StateTransition",
-    "details": {
-      "log": "Fork(6) exits state \u0027available\u0027.",
-      "id": "Fork(6)",
-      "state": "available",
-      "payload": "null",
-      "isEntry": false,
-      "clock": {
-        "Fork(6)": 9,
-        "Philo(7)": 6
-      }
-    }
-  },
-  {
-    "type": "StateTransition",
-    "details": {
-      "log": "Fork(6) enters state \u0027taken\u0027.",
-      "id": "Fork(6)",
-      "state": "taken",
-      "payload": "null",
-      "isEntry": true,
-      "clock": {
-        "Fork(6)": 10,
-        "Philo(7)": 6
-      }
-    }
-  },
-  {
-    "type": "CreateStateMachine",
-    "details": {
-      "log": "Philo(10) was created by Main(1).",
-      "id": "Philo(10)",
-      "creatorName": "Main(1)",
-      "creatorType": "Main",
-      "payload": "null",
-      "clock": {
-        "Philo(10)": 1
-      }
-    }
-  },
-  {
-    "type": "StateTransition",
-    "details": {
-      "log": "Philo(9) enters state \u0027Init\u0027.",
-      "id": "Philo(9)",
-      "state": "Init",
-      "payload": "null",
-      "isEntry": true,
-      "clock": {
-        "Philo(9)": 2
-      }
-    }
-  },
-  {
-    "type": "Print",
-    "details": {
-      "log": "Philosopher 2: left fork 2 and right fork 3",
-      "payload": "null"
-    }
-  },
-  {
-    "type": "GotoState",
-    "details": {
-      "log": "Philo(9) is transitioning from state \u0027Init\u0027 to state \u0027thinking\u0027.",
-      "id": "Philo(9)",
-      "startState": "Init",
-      "endState": "thinking",
-      "payload": "null",
-      "clock": {
-        "Philo(9)": 3
-      }
-    }
-  },
-  {
-    "type": "StateTransition",
-    "details": {
-      "log": "Philo(9) exits state \u0027Init\u0027.",
-      "id": "Philo(9)",
-      "state": "Init",
-      "payload": "null",
-      "isEntry": false,
-      "clock": {
-        "Philo(9)": 4
-      }
-    }
-  },
-  {
-    "type": "StateTransition",
-    "details": {
-      "log": "Philo(9) enters state \u0027thinking\u0027.",
-      "id": "Philo(9)",
-      "state": "thinking",
-      "payload": "null",
-      "isEntry": true,
-      "clock": {
-        "Philo(9)": 5
-      }
-    }
-  },
-  {
-    "type": "DequeueEvent",
-    "details": {
-      "log": "\u0027Philo(7)\u0027 dequeued event \u0027eForkAcquired\u0027 in state \u0027thinking\u0027.",
-      "id": "Philo(7)",
-      "event": "eForkAcquired",
-      "state": "thinking",
-      "payload": "null",
-      "clock": {
-        "Philo(7)": 7,
-        "Fork(6)": 7
-      }
-    }
-  },
-  {
-    "type": "Print",
-    "details": {
-      "log": "Philosopher 0 is GOT his left fork 0, now trying for right fork 1",
-      "payload": "null"
-    }
-  },
-  {
-    "type": "SendEvent",
-    "details": {
-      "log": "\u0027Philo(7)\u0027 in state \u0027thinking\u0027 sent event \u0027eAcquireFork with payload (\u003Cphilosopher:Philo(7), philo_id:0, \u003E)\u0027 to \u0027Fork(5)\u0027.",
-      "event": "eAcquireFork",
-      "state": "thinking",
-      "payload": {
-        "philosopher": "Philo(7)",
-        "philo_id": 0
-      },
-      "sender": "Philo(7)",
-      "target": "Fork(5)",
-      "isTargetHalted": false,
-      "clock": {
-        "Philo(7)": 8,
-        "Fork(6)": 7
+        "Philo(7)": 9
       }
     }
   },
@@ -791,7 +584,7 @@
   {
     "type": "Print",
     "details": {
-      "log": "Philosopher 1: left fork 1 and right fork 2",
+      "log": "Philosopher 1: left 1 and right 2",
       "payload": "null"
     }
   },
@@ -835,251 +628,215 @@
     }
   },
   {
-    "type": "SendEvent",
-    "details": {
-      "log": "\u0027Philo(9)\u0027 in state \u0027thinking\u0027 sent event \u0027eAcquireFork with payload (\u003Cphilosopher:Philo(9), philo_id:2, \u003E)\u0027 to \u0027Fork(4)\u0027.",
-      "event": "eAcquireFork",
-      "state": "thinking",
-      "payload": {
-        "philosopher": "Philo(9)",
-        "philo_id": 2
-      },
-      "sender": "Philo(9)",
-      "target": "Fork(4)",
-      "isTargetHalted": false,
-      "clock": {
-        "Philo(9)": 6
-      }
-    }
-  },
-  {
-    "type": "StateTransition",
-    "details": {
-      "log": "Philo(10) enters state \u0027Init\u0027.",
-      "id": "Philo(10)",
-      "state": "Init",
-      "payload": "null",
-      "isEntry": true,
-      "clock": {
-        "Philo(10)": 2
-      }
-    }
-  },
-  {
-    "type": "Print",
-    "details": {
-      "log": "Philosopher 3: left fork 3 and right fork 4",
-      "payload": "null"
-    }
-  },
-  {
     "type": "GotoState",
     "details": {
-      "log": "Philo(10) is transitioning from state \u0027Init\u0027 to state \u0027thinking\u0027.",
-      "id": "Philo(10)",
-      "startState": "Init",
-      "endState": "thinking",
+      "log": "Philo(8) is transitioning from state \u0027thinking\u0027 to state \u0027philoReady\u0027.",
+      "id": "Philo(8)",
+      "startState": "thinking",
+      "endState": "philoReady",
       "payload": "null",
-      "clock": {
-        "Philo(10)": 3
-      }
-    }
-  },
-  {
-    "type": "StateTransition",
-    "details": {
-      "log": "Philo(10) exits state \u0027Init\u0027.",
-      "id": "Philo(10)",
-      "state": "Init",
-      "payload": "null",
-      "isEntry": false,
-      "clock": {
-        "Philo(10)": 4
-      }
-    }
-  },
-  {
-    "type": "StateTransition",
-    "details": {
-      "log": "Philo(10) enters state \u0027thinking\u0027.",
-      "id": "Philo(10)",
-      "state": "thinking",
-      "payload": "null",
-      "isEntry": true,
-      "clock": {
-        "Philo(10)": 5
-      }
-    }
-  },
-  {
-    "type": "DequeueEvent",
-    "details": {
-      "log": "\u0027Fork(4)\u0027 dequeued event \u0027eAcquireFork with payload (\u003Cphilosopher:Philo(9), philo_id:2, \u003E)\u0027 in state \u0027available\u0027.",
-      "id": "Fork(4)",
-      "event": "eAcquireFork",
-      "state": "available",
-      "payload": {
-        "philosopher": "Philo(9)",
-        "philo_id": 2
-      },
-      "clock": {
-        "Fork(4)": 6,
-        "Philo(9)": 6
-      }
-    }
-  },
-  {
-    "type": "MonitorProcessEvent",
-    "details": {
-      "log": "DeadlockDetection is processing event \u0027eForkAcquired\u0027 in state \u0027Monitoring\u0027.",
-      "event": "eForkAcquired",
-      "state": "Monitoring",
-      "payload": "null",
-      "sender": "Fork(4)",
-      "monitor": "DeadlockDetection",
-      "clock": {
-        "DeadlockDetection": 4,
-        "Fork(6)": 6,
-        "Philo(7)": 6,
-        "Fork(4)": 6,
-        "Philo(9)": 6
-      }
-    }
-  },
-  {
-    "type": "Print",
-    "details": {
-      "log": "Total fork acquisitions: 2",
-      "payload": "null"
-    }
-  },
-  {
-    "type": "SendEvent",
-    "details": {
-      "log": "\u0027Philo(10)\u0027 in state \u0027thinking\u0027 sent event \u0027eAcquireFork with payload (\u003Cphilosopher:Philo(10), philo_id:3, \u003E)\u0027 to \u0027Fork(3)\u0027.",
-      "event": "eAcquireFork",
-      "state": "thinking",
-      "payload": {
-        "philosopher": "Philo(10)",
-        "philo_id": 3
-      },
-      "sender": "Philo(10)",
-      "target": "Fork(3)",
-      "isTargetHalted": false,
-      "clock": {
-        "Philo(10)": 6
-      }
-    }
-  },
-  {
-    "type": "SendEvent",
-    "details": {
-      "log": "\u0027Philo(8)\u0027 in state \u0027thinking\u0027 sent event \u0027eAcquireFork with payload (\u003Cphilosopher:Philo(8), philo_id:1, \u003E)\u0027 to \u0027Fork(5)\u0027.",
-      "event": "eAcquireFork",
-      "state": "thinking",
-      "payload": {
-        "philosopher": "Philo(8)",
-        "philo_id": 1
-      },
-      "sender": "Philo(8)",
-      "target": "Fork(5)",
-      "isTargetHalted": false,
       "clock": {
         "Philo(8)": 6
       }
     }
   },
   {
-    "type": "DequeueEvent",
+    "type": "StateTransition",
     "details": {
-      "log": "\u0027Fork(3)\u0027 dequeued event \u0027eAcquireFork with payload (\u003Cphilosopher:Philo(10), philo_id:3, \u003E)\u0027 in state \u0027available\u0027.",
-      "id": "Fork(3)",
-      "event": "eAcquireFork",
-      "state": "available",
-      "payload": {
-        "philosopher": "Philo(10)",
-        "philo_id": 3
-      },
+      "log": "Philo(8) exits state \u0027thinking\u0027.",
+      "id": "Philo(8)",
+      "state": "thinking",
+      "payload": "null",
+      "isEntry": false,
       "clock": {
-        "Fork(3)": 6,
-        "Philo(10)": 6
+        "Philo(8)": 7
       }
+    }
+  },
+  {
+    "type": "StateTransition",
+    "details": {
+      "log": "Philo(8) enters state \u0027philoReady\u0027.",
+      "id": "Philo(8)",
+      "state": "philoReady",
+      "payload": "null",
+      "isEntry": true,
+      "clock": {
+        "Philo(8)": 8
+      }
+    }
+  },
+  {
+    "type": "Print",
+    "details": {
+      "log": "Philosopher 1 is READY",
+      "payload": "null"
     }
   },
   {
     "type": "MonitorProcessEvent",
     "details": {
-      "log": "DeadlockDetection is processing event \u0027eForkAcquired\u0027 in state \u0027Monitoring\u0027.",
-      "event": "eForkAcquired",
+      "log": "DeadlockDetection is processing event \u0027ePhiloReady\u0027 in state \u0027Monitoring\u0027.",
+      "event": "ePhiloReady",
       "state": "Monitoring",
       "payload": "null",
-      "sender": "Fork(3)",
+      "sender": "Philo(8)",
       "monitor": "DeadlockDetection",
       "clock": {
-        "DeadlockDetection": 5,
-        "Fork(6)": 6,
-        "Philo(7)": 6,
-        "Fork(4)": 6,
-        "Philo(9)": 6,
-        "Fork(3)": 6,
-        "Philo(10)": 6
+        "DeadlockDetection": 4,
+        "Philo(7)": 8,
+        "Philo(8)": 8
       }
-    }
-  },
-  {
-    "type": "Print",
-    "details": {
-      "log": "Total fork acquisitions: 3",
-      "payload": "null"
     }
   },
   {
     "type": "SendEvent",
     "details": {
-      "log": "\u0027Fork(4)\u0027 in state \u0027available\u0027 sent event \u0027eForkAcquired\u0027 to \u0027Philo(9)\u0027.",
-      "event": "eForkAcquired",
-      "state": "available",
+      "log": "\u0027Philo(8)\u0027 in state \u0027philoReady\u0027 sent event \u0027ePhiloReady\u0027 to \u0027Philo(8)\u0027.",
+      "event": "ePhiloReady",
+      "state": "philoReady",
       "payload": "null",
-      "sender": "Fork(4)",
-      "target": "Philo(9)",
+      "sender": "Philo(8)",
+      "target": "Philo(8)",
       "isTargetHalted": false,
       "clock": {
-        "Fork(4)": 7,
-        "Philo(9)": 6
+        "Philo(8)": 9
+      }
+    }
+  },
+  {
+    "type": "CreateStateMachine",
+    "details": {
+      "log": "Philo(9) was created by Main(1).",
+      "id": "Philo(9)",
+      "creatorName": "Main(1)",
+      "creatorType": "Main",
+      "payload": "null",
+      "clock": {
+        "Philo(9)": 1
+      }
+    }
+  },
+  {
+    "type": "DequeueEvent",
+    "details": {
+      "log": "\u0027Philo(7)\u0027 dequeued event \u0027ePhiloReady\u0027 in state \u0027philoReady\u0027.",
+      "id": "Philo(7)",
+      "event": "ePhiloReady",
+      "state": "philoReady",
+      "payload": "null",
+      "clock": {
+        "Philo(7)": 10
+      }
+    }
+  },
+  {
+    "type": "GotoState",
+    "details": {
+      "log": "Philo(7) is transitioning from state \u0027philoReady\u0027 to state \u0027thinking\u0027.",
+      "id": "Philo(7)",
+      "startState": "philoReady",
+      "endState": "thinking",
+      "payload": "null",
+      "clock": {
+        "Philo(7)": 11
+      }
+    }
+  },
+  {
+    "type": "StateTransition",
+    "details": {
+      "log": "Philo(7) exits state \u0027philoReady\u0027.",
+      "id": "Philo(7)",
+      "state": "philoReady",
+      "payload": "null",
+      "isEntry": false,
+      "clock": {
+        "Philo(7)": 12
+      }
+    }
+  },
+  {
+    "type": "StateTransition",
+    "details": {
+      "log": "Philo(7) enters state \u0027thinking\u0027.",
+      "id": "Philo(7)",
+      "state": "thinking",
+      "payload": "null",
+      "isEntry": true,
+      "clock": {
+        "Philo(7)": 13
+      }
+    }
+  },
+  {
+    "type": "StateTransition",
+    "details": {
+      "log": "Philo(9) enters state \u0027Init\u0027.",
+      "id": "Philo(9)",
+      "state": "Init",
+      "payload": "null",
+      "isEntry": true,
+      "clock": {
+        "Philo(9)": 2
       }
     }
   },
   {
     "type": "Print",
     "details": {
-      "log": "Fork 2 acquired by philosopher 2",
+      "log": "Philosopher 2: left 2 and right 3",
       "payload": "null"
     }
   },
   {
     "type": "GotoState",
     "details": {
-      "log": "Fork(4) is transitioning from state \u0027available\u0027 to state \u0027taken\u0027.",
-      "id": "Fork(4)",
-      "startState": "available",
-      "endState": "taken",
+      "log": "Philo(9) is transitioning from state \u0027Init\u0027 to state \u0027thinking\u0027.",
+      "id": "Philo(9)",
+      "startState": "Init",
+      "endState": "thinking",
       "payload": "null",
       "clock": {
-        "Fork(4)": 8,
-        "Philo(9)": 6
+        "Philo(9)": 3
       }
     }
   },
   {
     "type": "StateTransition",
     "details": {
-      "log": "Fork(4) exits state \u0027available\u0027.",
-      "id": "Fork(4)",
-      "state": "available",
+      "log": "Philo(9) exits state \u0027Init\u0027.",
+      "id": "Philo(9)",
+      "state": "Init",
       "payload": "null",
       "isEntry": false,
       "clock": {
-        "Fork(4)": 9,
+        "Philo(9)": 4
+      }
+    }
+  },
+  {
+    "type": "StateTransition",
+    "details": {
+      "log": "Philo(9) enters state \u0027thinking\u0027.",
+      "id": "Philo(9)",
+      "state": "thinking",
+      "payload": "null",
+      "isEntry": true,
+      "clock": {
+        "Philo(9)": 5
+      }
+    }
+  },
+  {
+    "type": "GotoState",
+    "details": {
+      "log": "Philo(9) is transitioning from state \u0027thinking\u0027 to state \u0027philoReady\u0027.",
+      "id": "Philo(9)",
+      "startState": "thinking",
+      "endState": "philoReady",
+      "payload": "null",
+      "clock": {
         "Philo(9)": 6
       }
     }
@@ -1087,101 +844,79 @@
   {
     "type": "StateTransition",
     "details": {
-      "log": "Fork(4) enters state \u0027taken\u0027.",
-      "id": "Fork(4)",
-      "state": "taken",
+      "log": "Philo(9) exits state \u0027thinking\u0027.",
+      "id": "Philo(9)",
+      "state": "thinking",
       "payload": "null",
-      "isEntry": true,
+      "isEntry": false,
       "clock": {
-        "Fork(4)": 10,
-        "Philo(9)": 6
+        "Philo(9)": 7
       }
     }
   },
   {
-    "type": "DequeueEvent",
+    "type": "StateTransition",
     "details": {
-      "log": "\u0027Philo(9)\u0027 dequeued event \u0027eForkAcquired\u0027 in state \u0027thinking\u0027.",
+      "log": "Philo(9) enters state \u0027philoReady\u0027.",
       "id": "Philo(9)",
-      "event": "eForkAcquired",
-      "state": "thinking",
+      "state": "philoReady",
       "payload": "null",
+      "isEntry": true,
       "clock": {
-        "Philo(9)": 7,
-        "Fork(4)": 7
+        "Philo(9)": 8
       }
     }
   },
   {
     "type": "Print",
     "details": {
-      "log": "Philosopher 2 is GOT his left fork 2, now trying for right fork 3",
+      "log": "Philosopher 2 is READY",
       "payload": "null"
-    }
-  },
-  {
-    "type": "SendEvent",
-    "details": {
-      "log": "\u0027Philo(9)\u0027 in state \u0027thinking\u0027 sent event \u0027eAcquireFork with payload (\u003Cphilosopher:Philo(9), philo_id:2, \u003E)\u0027 to \u0027Fork(3)\u0027.",
-      "event": "eAcquireFork",
-      "state": "thinking",
-      "payload": {
-        "philosopher": "Philo(9)",
-        "philo_id": 2
-      },
-      "sender": "Philo(9)",
-      "target": "Fork(3)",
-      "isTargetHalted": false,
-      "clock": {
-        "Philo(9)": 8,
-        "Fork(4)": 7
-      }
-    }
-  },
-  {
-    "type": "DequeueEvent",
-    "details": {
-      "log": "\u0027Fork(5)\u0027 dequeued event \u0027eAcquireFork with payload (\u003Cphilosopher:Philo(7), philo_id:0, \u003E)\u0027 in state \u0027available\u0027.",
-      "id": "Fork(5)",
-      "event": "eAcquireFork",
-      "state": "available",
-      "payload": {
-        "philosopher": "Philo(7)",
-        "philo_id": 0
-      },
-      "clock": {
-        "Fork(5)": 6,
-        "Philo(7)": 8,
-        "Fork(6)": 7
-      }
     }
   },
   {
     "type": "MonitorProcessEvent",
     "details": {
-      "log": "DeadlockDetection is processing event \u0027eForkAcquired\u0027 in state \u0027Monitoring\u0027.",
-      "event": "eForkAcquired",
+      "log": "DeadlockDetection is processing event \u0027ePhiloReady\u0027 in state \u0027Monitoring\u0027.",
+      "event": "ePhiloReady",
       "state": "Monitoring",
       "payload": "null",
-      "sender": "Fork(5)",
+      "sender": "Philo(9)",
       "monitor": "DeadlockDetection",
       "clock": {
-        "DeadlockDetection": 6,
-        "Fork(6)": 7,
+        "DeadlockDetection": 5,
         "Philo(7)": 8,
-        "Fork(4)": 6,
-        "Philo(9)": 6,
-        "Fork(3)": 6,
-        "Philo(10)": 6,
-        "Fork(5)": 6
+        "Philo(8)": 8,
+        "Philo(9)": 8
       }
     }
   },
   {
-    "type": "Print",
+    "type": "CreateStateMachine",
     "details": {
-      "log": "Total fork acquisitions: 4",
-      "payload": "null"
+      "log": "Philo(10) was created by Main(1).",
+      "id": "Philo(10)",
+      "creatorName": "Main(1)",
+      "creatorType": "Main",
+      "payload": "null",
+      "clock": {
+        "Philo(10)": 1
+      }
+    }
+  },
+  {
+    "type": "SendEvent",
+    "details": {
+      "log": "\u0027Philo(9)\u0027 in state \u0027philoReady\u0027 sent event \u0027ePhiloReady\u0027 to \u0027Philo(9)\u0027.",
+      "event": "ePhiloReady",
+      "state": "philoReady",
+      "payload": "null",
+      "sender": "Philo(9)",
+      "target": "Philo(9)",
+      "isTargetHalted": false,
+      "clock": {
+        "Philo(9)": 9
+      }
     }
   },
   {
@@ -1205,649 +940,54 @@
     }
   },
   {
-    "type": "SendEvent",
-    "details": {
-      "log": "\u0027Fork(5)\u0027 in state \u0027available\u0027 sent event \u0027eForkAcquired\u0027 to \u0027Philo(7)\u0027.",
-      "event": "eForkAcquired",
-      "state": "available",
-      "payload": "null",
-      "sender": "Fork(5)",
-      "target": "Philo(7)",
-      "isTargetHalted": false,
-      "clock": {
-        "Fork(5)": 7,
-        "Philo(7)": 8,
-        "Fork(6)": 7
-      }
-    }
-  },
-  {
-    "type": "Print",
-    "details": {
-      "log": "Fork 3 acquired by philosopher 0",
-      "payload": "null"
-    }
-  },
-  {
-    "type": "GotoState",
-    "details": {
-      "log": "Fork(5) is transitioning from state \u0027available\u0027 to state \u0027taken\u0027.",
-      "id": "Fork(5)",
-      "startState": "available",
-      "endState": "taken",
-      "payload": "null",
-      "clock": {
-        "Fork(5)": 8,
-        "Philo(7)": 8,
-        "Fork(6)": 7
-      }
-    }
-  },
-  {
-    "type": "StateTransition",
-    "details": {
-      "log": "Fork(5) exits state \u0027available\u0027.",
-      "id": "Fork(5)",
-      "state": "available",
-      "payload": "null",
-      "isEntry": false,
-      "clock": {
-        "Fork(5)": 9,
-        "Philo(7)": 8,
-        "Fork(6)": 7
-      }
-    }
-  },
-  {
-    "type": "StateTransition",
-    "details": {
-      "log": "Fork(5) enters state \u0027taken\u0027.",
-      "id": "Fork(5)",
-      "state": "taken",
-      "payload": "null",
-      "isEntry": true,
-      "clock": {
-        "Fork(5)": 10,
-        "Philo(7)": 8,
-        "Fork(6)": 7
-      }
-    }
-  },
-  {
     "type": "DequeueEvent",
     "details": {
-      "log": "\u0027Philo(7)\u0027 dequeued event \u0027eForkAcquired\u0027 in state \u0027thinking\u0027.",
-      "id": "Philo(7)",
-      "event": "eForkAcquired",
-      "state": "thinking",
+      "log": "\u0027Philo(9)\u0027 dequeued event \u0027ePhiloReady\u0027 in state \u0027philoReady\u0027.",
+      "id": "Philo(9)",
+      "event": "ePhiloReady",
+      "state": "philoReady",
       "payload": "null",
       "clock": {
-        "Philo(7)": 9,
-        "Fork(6)": 7,
-        "Fork(5)": 7
+        "Philo(9)": 10
       }
-    }
-  },
-  {
-    "type": "Print",
-    "details": {
-      "log": "Philosopher 0 acquired both forks: left 0 and right 1, starting to eat",
-      "payload": "null"
     }
   },
   {
     "type": "GotoState",
     "details": {
-      "log": "Philo(7) is transitioning from state \u0027thinking\u0027 to state \u0027eating\u0027.",
-      "id": "Philo(7)",
-      "startState": "thinking",
-      "endState": "eating",
-      "payload": "null",
-      "clock": {
-        "Philo(7)": 10,
-        "Fork(6)": 7,
-        "Fork(5)": 7
-      }
-    }
-  },
-  {
-    "type": "StateTransition",
-    "details": {
-      "log": "Philo(7) exits state \u0027thinking\u0027.",
-      "id": "Philo(7)",
-      "state": "thinking",
-      "payload": "null",
-      "isEntry": false,
-      "clock": {
-        "Philo(7)": 11,
-        "Fork(6)": 7,
-        "Fork(5)": 7
-      }
-    }
-  },
-  {
-    "type": "StateTransition",
-    "details": {
-      "log": "Philo(7) enters state \u0027eating\u0027.",
-      "id": "Philo(7)",
-      "state": "eating",
-      "payload": "null",
-      "isEntry": true,
-      "clock": {
-        "Philo(7)": 12,
-        "Fork(6)": 7,
-        "Fork(5)": 7
-      }
-    }
-  },
-  {
-    "type": "Print",
-    "details": {
-      "log": "Philosopher 0 is eating with forks: left 0 and right 1",
-      "payload": "null"
-    }
-  },
-  {
-    "type": "MonitorProcessEvent",
-    "details": {
-      "log": "DeadlockDetection is processing event \u0027eReleaseFork with payload (0)\u0027 in state \u0027Monitoring\u0027.",
-      "event": "eReleaseFork",
-      "state": "Monitoring",
-      "payload": 0,
-      "sender": "Philo(7)",
-      "monitor": "DeadlockDetection",
-      "clock": {
-        "DeadlockDetection": 7,
-        "Fork(6)": 7,
-        "Philo(7)": 12,
-        "Fork(4)": 6,
-        "Philo(9)": 6,
-        "Fork(3)": 6,
-        "Philo(10)": 6,
-        "Fork(5)": 7
-      }
-    }
-  },
-  {
-    "type": "Print",
-    "details": {
-      "log": "Total fork acquisitions after release: 3",
-      "payload": "null"
-    }
-  },
-  {
-    "type": "SendEvent",
-    "details": {
-      "log": "\u0027Philo(7)\u0027 in state \u0027eating\u0027 sent event \u0027eReleaseFork with payload (0)\u0027 to \u0027Fork(6)\u0027.",
-      "event": "eReleaseFork",
-      "state": "eating",
-      "payload": 0,
-      "sender": "Philo(7)",
-      "target": "Fork(6)",
-      "isTargetHalted": false,
-      "clock": {
-        "Philo(7)": 13,
-        "Fork(6)": 7,
-        "Fork(5)": 7
-      }
-    }
-  },
-  {
-    "type": "MonitorProcessEvent",
-    "details": {
-      "log": "DeadlockDetection is processing event \u0027eReleaseFork with payload (0)\u0027 in state \u0027Monitoring\u0027.",
-      "event": "eReleaseFork",
-      "state": "Monitoring",
-      "payload": 0,
-      "sender": "Philo(7)",
-      "monitor": "DeadlockDetection",
-      "clock": {
-        "DeadlockDetection": 8,
-        "Fork(6)": 7,
-        "Philo(7)": 13,
-        "Fork(4)": 6,
-        "Philo(9)": 6,
-        "Fork(3)": 6,
-        "Philo(10)": 6,
-        "Fork(5)": 7
-      }
-    }
-  },
-  {
-    "type": "Print",
-    "details": {
-      "log": "Total fork acquisitions after release: 2",
-      "payload": "null"
-    }
-  },
-  {
-    "type": "DequeueEvent",
-    "details": {
-      "log": "\u0027Fork(6)\u0027 dequeued event \u0027eReleaseFork with payload (0)\u0027 in state \u0027taken\u0027.",
-      "id": "Fork(6)",
-      "event": "eReleaseFork",
-      "state": "taken",
-      "payload": 0,
-      "clock": {
-        "Fork(6)": 11,
-        "Philo(7)": 13,
-        "Fork(5)": 7
-      }
-    }
-  },
-  {
-    "type": "Print",
-    "details": {
-      "log": "Fork 4 released by philosopher 0",
-      "payload": "null"
-    }
-  },
-  {
-    "type": "GotoState",
-    "details": {
-      "log": "Fork(6) is transitioning from state \u0027taken\u0027 to state \u0027available\u0027.",
-      "id": "Fork(6)",
-      "startState": "taken",
-      "endState": "available",
-      "payload": "null",
-      "clock": {
-        "Fork(6)": 12,
-        "Philo(7)": 13,
-        "Fork(5)": 7
-      }
-    }
-  },
-  {
-    "type": "StateTransition",
-    "details": {
-      "log": "Fork(6) exits state \u0027taken\u0027.",
-      "id": "Fork(6)",
-      "state": "taken",
-      "payload": "null",
-      "isEntry": false,
-      "clock": {
-        "Fork(6)": 13,
-        "Philo(7)": 13,
-        "Fork(5)": 7
-      }
-    }
-  },
-  {
-    "type": "StateTransition",
-    "details": {
-      "log": "Fork(6) enters state \u0027available\u0027.",
-      "id": "Fork(6)",
-      "state": "available",
-      "payload": "null",
-      "isEntry": true,
-      "clock": {
-        "Fork(6)": 14,
-        "Philo(7)": 13,
-        "Fork(5)": 7
-      }
-    }
-  },
-  {
-    "type": "Print",
-    "details": {
-      "log": "Fork 4 is available",
-      "payload": "null"
-    }
-  },
-  {
-    "type": "SendEvent",
-    "details": {
-      "log": "\u0027Philo(7)\u0027 in state \u0027eating\u0027 sent event \u0027eReleaseFork with payload (0)\u0027 to \u0027Fork(5)\u0027.",
-      "event": "eReleaseFork",
-      "state": "eating",
-      "payload": 0,
-      "sender": "Philo(7)",
-      "target": "Fork(5)",
-      "isTargetHalted": false,
-      "clock": {
-        "Philo(7)": 14,
-        "Fork(6)": 7,
-        "Fork(5)": 7
-      }
-    }
-  },
-  {
-    "type": "Print",
-    "details": {
-      "log": "Philosopher 0 released forks: left 0 and right 1, now thinking again",
-      "payload": "null"
-    }
-  },
-  {
-    "type": "GotoState",
-    "details": {
-      "log": "Philo(7) is transitioning from state \u0027eating\u0027 to state \u0027thinking\u0027.",
-      "id": "Philo(7)",
-      "startState": "eating",
+      "log": "Philo(9) is transitioning from state \u0027philoReady\u0027 to state \u0027thinking\u0027.",
+      "id": "Philo(9)",
+      "startState": "philoReady",
       "endState": "thinking",
       "payload": "null",
       "clock": {
-        "Philo(7)": 15,
-        "Fork(6)": 7,
-        "Fork(5)": 7
+        "Philo(9)": 11
       }
     }
   },
   {
     "type": "StateTransition",
     "details": {
-      "log": "Philo(7) exits state \u0027eating\u0027.",
-      "id": "Philo(7)",
-      "state": "eating",
+      "log": "Philo(9) exits state \u0027philoReady\u0027.",
+      "id": "Philo(9)",
+      "state": "philoReady",
       "payload": "null",
       "isEntry": false,
       "clock": {
-        "Philo(7)": 16,
-        "Fork(6)": 7,
-        "Fork(5)": 7
+        "Philo(9)": 12
       }
     }
   },
   {
     "type": "StateTransition",
     "details": {
-      "log": "Philo(7) enters state \u0027thinking\u0027.",
-      "id": "Philo(7)",
+      "log": "Philo(9) enters state \u0027thinking\u0027.",
+      "id": "Philo(9)",
       "state": "thinking",
       "payload": "null",
       "isEntry": true,
       "clock": {
-        "Philo(7)": 17,
-        "Fork(6)": 7,
-        "Fork(5)": 7
-      }
-    }
-  },
-  {
-    "type": "SendEvent",
-    "details": {
-      "log": "\u0027Philo(7)\u0027 in state \u0027thinking\u0027 sent event \u0027eAcquireFork with payload (\u003Cphilosopher:Philo(7), philo_id:0, \u003E)\u0027 to \u0027Fork(6)\u0027.",
-      "event": "eAcquireFork",
-      "state": "thinking",
-      "payload": {
-        "philosopher": "Philo(7)",
-        "philo_id": 0
-      },
-      "sender": "Philo(7)",
-      "target": "Fork(6)",
-      "isTargetHalted": false,
-      "clock": {
-        "Philo(7)": 18,
-        "Fork(6)": 7,
-        "Fork(5)": 7
-      }
-    }
-  },
-  {
-    "type": "DequeueEvent",
-    "details": {
-      "log": "\u0027Fork(5)\u0027 dequeued event \u0027eAcquireFork with payload (\u003Cphilosopher:Philo(8), philo_id:1, \u003E)\u0027 in state \u0027taken\u0027.",
-      "id": "Fork(5)",
-      "event": "eAcquireFork",
-      "state": "taken",
-      "payload": {
-        "philosopher": "Philo(8)",
-        "philo_id": 1
-      },
-      "clock": {
-        "Fork(5)": 11,
-        "Philo(7)": 8,
-        "Fork(6)": 7,
-        "Philo(8)": 6
-      }
-    }
-  },
-  {
-    "type": "Print",
-    "details": {
-      "log": "Fork 3 is busy by philosopher 0, philosopher 1 cannot acquire it",
-      "payload": "null"
-    }
-  },
-  {
-    "type": "DequeueEvent",
-    "details": {
-      "log": "\u0027Fork(6)\u0027 dequeued event \u0027eAcquireFork with payload (\u003Cphilosopher:Philo(7), philo_id:0, \u003E)\u0027 in state \u0027available\u0027.",
-      "id": "Fork(6)",
-      "event": "eAcquireFork",
-      "state": "available",
-      "payload": {
-        "philosopher": "Philo(7)",
-        "philo_id": 0
-      },
-      "clock": {
-        "Fork(6)": 15,
-        "Philo(7)": 18,
-        "Fork(5)": 7
-      }
-    }
-  },
-  {
-    "type": "MonitorProcessEvent",
-    "details": {
-      "log": "DeadlockDetection is processing event \u0027eForkAcquired\u0027 in state \u0027Monitoring\u0027.",
-      "event": "eForkAcquired",
-      "state": "Monitoring",
-      "payload": "null",
-      "sender": "Fork(6)",
-      "monitor": "DeadlockDetection",
-      "clock": {
-        "DeadlockDetection": 9,
-        "Fork(6)": 15,
-        "Philo(7)": 18,
-        "Fork(4)": 6,
-        "Philo(9)": 6,
-        "Fork(3)": 6,
-        "Philo(10)": 6,
-        "Fork(5)": 7
-      }
-    }
-  },
-  {
-    "type": "Print",
-    "details": {
-      "log": "Total fork acquisitions: 3",
-      "payload": "null"
-    }
-  },
-  {
-    "type": "SendEvent",
-    "details": {
-      "log": "\u0027Fork(5)\u0027 in state \u0027taken\u0027 sent event \u0027eForkBusy with payload (\u003Cfork:Fork(5), philo_id:0, fork_id:3, \u003E)\u0027 to \u0027Philo(8)\u0027.",
-      "event": "eForkBusy",
-      "state": "taken",
-      "payload": {
-        "fork": "Fork(5)",
-        "philo_id": 0,
-        "fork_id": 3
-      },
-      "sender": "Fork(5)",
-      "target": "Philo(8)",
-      "isTargetHalted": false,
-      "clock": {
-        "Fork(5)": 12,
-        "Philo(7)": 8,
-        "Fork(6)": 7,
-        "Philo(8)": 6
-      }
-    }
-  },
-  {
-    "type": "DequeueEvent",
-    "details": {
-      "log": "\u0027Philo(8)\u0027 dequeued event \u0027eForkBusy with payload (\u003Cfork:Fork(5), philo_id:0, fork_id:3, \u003E)\u0027 in state \u0027thinking\u0027.",
-      "id": "Philo(8)",
-      "event": "eForkBusy",
-      "state": "thinking",
-      "payload": {
-        "fork": "Fork(5)",
-        "philo_id": 0,
-        "fork_id": 3
-      },
-      "clock": {
-        "Philo(8)": 7,
-        "Fork(5)": 12,
-        "Philo(7)": 8,
-        "Fork(6)": 7
-      }
-    }
-  },
-  {
-    "type": "Print",
-    "details": {
-      "log": "Philosopher 1 could not acquire fork 3 (held by philosopher 0), retrying...",
-      "payload": "null"
-    }
-  },
-  {
-    "type": "DequeueEvent",
-    "details": {
-      "log": "\u0027Fork(5)\u0027 dequeued event \u0027eReleaseFork with payload (0)\u0027 in state \u0027taken\u0027.",
-      "id": "Fork(5)",
-      "event": "eReleaseFork",
-      "state": "taken",
-      "payload": 0,
-      "clock": {
-        "Fork(5)": 13,
-        "Philo(7)": 14,
-        "Fork(6)": 7,
-        "Philo(8)": 6
-      }
-    }
-  },
-  {
-    "type": "Print",
-    "details": {
-      "log": "Fork 3 released by philosopher 0",
-      "payload": "null"
-    }
-  },
-  {
-    "type": "GotoState",
-    "details": {
-      "log": "Fork(5) is transitioning from state \u0027taken\u0027 to state \u0027available\u0027.",
-      "id": "Fork(5)",
-      "startState": "taken",
-      "endState": "available",
-      "payload": "null",
-      "clock": {
-        "Fork(5)": 14,
-        "Philo(7)": 14,
-        "Fork(6)": 7,
-        "Philo(8)": 6
-      }
-    }
-  },
-  {
-    "type": "StateTransition",
-    "details": {
-      "log": "Fork(5) exits state \u0027taken\u0027.",
-      "id": "Fork(5)",
-      "state": "taken",
-      "payload": "null",
-      "isEntry": false,
-      "clock": {
-        "Fork(5)": 15,
-        "Philo(7)": 14,
-        "Fork(6)": 7,
-        "Philo(8)": 6
-      }
-    }
-  },
-  {
-    "type": "StateTransition",
-    "details": {
-      "log": "Fork(5) enters state \u0027available\u0027.",
-      "id": "Fork(5)",
-      "state": "available",
-      "payload": "null",
-      "isEntry": true,
-      "clock": {
-        "Fork(5)": 16,
-        "Philo(7)": 14,
-        "Fork(6)": 7,
-        "Philo(8)": 6
-      }
-    }
-  },
-  {
-    "type": "Print",
-    "details": {
-      "log": "Fork 3 is available",
-      "payload": "null"
-    }
-  },
-  {
-    "type": "SendEvent",
-    "details": {
-      "log": "\u0027Fork(6)\u0027 in state \u0027available\u0027 sent event \u0027eForkAcquired\u0027 to \u0027Philo(7)\u0027.",
-      "event": "eForkAcquired",
-      "state": "available",
-      "payload": "null",
-      "sender": "Fork(6)",
-      "target": "Philo(7)",
-      "isTargetHalted": false,
-      "clock": {
-        "Fork(6)": 16,
-        "Philo(7)": 18,
-        "Fork(5)": 7
-      }
-    }
-  },
-  {
-    "type": "Print",
-    "details": {
-      "log": "Fork 4 acquired by philosopher 0",
-      "payload": "null"
-    }
-  },
-  {
-    "type": "GotoState",
-    "details": {
-      "log": "Fork(6) is transitioning from state \u0027available\u0027 to state \u0027taken\u0027.",
-      "id": "Fork(6)",
-      "startState": "available",
-      "endState": "taken",
-      "payload": "null",
-      "clock": {
-        "Fork(6)": 17,
-        "Philo(7)": 18,
-        "Fork(5)": 7
-      }
-    }
-  },
-  {
-    "type": "StateTransition",
-    "details": {
-      "log": "Fork(6) exits state \u0027available\u0027.",
-      "id": "Fork(6)",
-      "state": "available",
-      "payload": "null",
-      "isEntry": false,
-      "clock": {
-        "Fork(6)": 18,
-        "Philo(7)": 18,
-        "Fork(5)": 7
-      }
-    }
-  },
-  {
-    "type": "StateTransition",
-    "details": {
-      "log": "Fork(6) enters state \u0027taken\u0027.",
-      "id": "Fork(6)",
-      "state": "taken",
-      "payload": "null",
-      "isEntry": true,
-      "clock": {
-        "Fork(6)": 19,
-        "Philo(7)": 18,
-        "Fork(5)": 7
+        "Philo(9)": 13
       }
     }
   },
@@ -1867,7 +1007,7 @@
   {
     "type": "Print",
     "details": {
-      "log": "Philosopher 4: left fork 4 and right fork 0",
+      "log": "Philosopher 4: left 4 and right 0",
       "payload": "null"
     }
   },
@@ -1911,26 +1051,678 @@
     }
   },
   {
-    "type": "SendEvent",
+    "type": "GotoState",
     "details": {
-      "log": "\u0027Fork(3)\u0027 in state \u0027available\u0027 sent event \u0027eForkAcquired\u0027 to \u0027Philo(10)\u0027.",
-      "event": "eForkAcquired",
-      "state": "available",
+      "log": "Philo(11) is transitioning from state \u0027thinking\u0027 to state \u0027philoReady\u0027.",
+      "id": "Philo(11)",
+      "startState": "thinking",
+      "endState": "philoReady",
       "payload": "null",
-      "sender": "Fork(3)",
-      "target": "Philo(10)",
-      "isTargetHalted": false,
       "clock": {
-        "Fork(3)": 7,
-        "Philo(10)": 6
+        "Philo(11)": 6
+      }
+    }
+  },
+  {
+    "type": "StateTransition",
+    "details": {
+      "log": "Philo(11) exits state \u0027thinking\u0027.",
+      "id": "Philo(11)",
+      "state": "thinking",
+      "payload": "null",
+      "isEntry": false,
+      "clock": {
+        "Philo(11)": 7
+      }
+    }
+  },
+  {
+    "type": "StateTransition",
+    "details": {
+      "log": "Philo(11) enters state \u0027philoReady\u0027.",
+      "id": "Philo(11)",
+      "state": "philoReady",
+      "payload": "null",
+      "isEntry": true,
+      "clock": {
+        "Philo(11)": 8
       }
     }
   },
   {
     "type": "Print",
     "details": {
-      "log": "Fork 1 acquired by philosopher 3",
+      "log": "Philosopher 4 is READY",
       "payload": "null"
+    }
+  },
+  {
+    "type": "MonitorProcessEvent",
+    "details": {
+      "log": "DeadlockDetection is processing event \u0027ePhiloReady\u0027 in state \u0027Monitoring\u0027.",
+      "event": "ePhiloReady",
+      "state": "Monitoring",
+      "payload": "null",
+      "sender": "Philo(11)",
+      "monitor": "DeadlockDetection",
+      "clock": {
+        "DeadlockDetection": 6,
+        "Philo(7)": 8,
+        "Philo(8)": 8,
+        "Philo(9)": 8,
+        "Philo(11)": 8
+      }
+    }
+  },
+  {
+    "type": "SendEvent",
+    "details": {
+      "log": "\u0027Philo(9)\u0027 in state \u0027thinking\u0027 sent event \u0027eAcquireFork with payload (\u003Cphilo:\u003Cid:2, left:\u003Cid:2, m:Fork(4), \u003E, right:\u003Cid:3, m:Fork(5), \u003E, isException:False, m:Philo(9), \u003E, fork:\u003Cid:2, m:Fork(4), \u003E, \u003E)\u0027 to \u0027Fork(4)\u0027.",
+      "event": "eAcquireFork",
+      "state": "thinking",
+      "payload": {
+        "philo": {
+          "id": 2,
+          "left": {
+            "id": 2,
+            "m": "Fork(4)"
+          },
+          "right": {
+            "id": 3,
+            "m": "Fork(5)"
+          },
+          "isException": false,
+          "m": "Philo(9)"
+        },
+        "fork": {
+          "id": 2,
+          "m": "Fork(4)"
+        }
+      },
+      "sender": "Philo(9)",
+      "target": "Fork(4)",
+      "isTargetHalted": false,
+      "clock": {
+        "Philo(9)": 14
+      }
+    }
+  },
+  {
+    "type": "SendEvent",
+    "details": {
+      "log": "\u0027Philo(11)\u0027 in state \u0027philoReady\u0027 sent event \u0027ePhiloReady\u0027 to \u0027Philo(11)\u0027.",
+      "event": "ePhiloReady",
+      "state": "philoReady",
+      "payload": "null",
+      "sender": "Philo(11)",
+      "target": "Philo(11)",
+      "isTargetHalted": false,
+      "clock": {
+        "Philo(11)": 9
+      }
+    }
+  },
+  {
+    "type": "DequeueEvent",
+    "details": {
+      "log": "\u0027Philo(11)\u0027 dequeued event \u0027ePhiloReady\u0027 in state \u0027philoReady\u0027.",
+      "id": "Philo(11)",
+      "event": "ePhiloReady",
+      "state": "philoReady",
+      "payload": "null",
+      "clock": {
+        "Philo(11)": 10
+      }
+    }
+  },
+  {
+    "type": "GotoState",
+    "details": {
+      "log": "Philo(11) is transitioning from state \u0027philoReady\u0027 to state \u0027thinking\u0027.",
+      "id": "Philo(11)",
+      "startState": "philoReady",
+      "endState": "thinking",
+      "payload": "null",
+      "clock": {
+        "Philo(11)": 11
+      }
+    }
+  },
+  {
+    "type": "StateTransition",
+    "details": {
+      "log": "Philo(11) exits state \u0027philoReady\u0027.",
+      "id": "Philo(11)",
+      "state": "philoReady",
+      "payload": "null",
+      "isEntry": false,
+      "clock": {
+        "Philo(11)": 12
+      }
+    }
+  },
+  {
+    "type": "StateTransition",
+    "details": {
+      "log": "Philo(11) enters state \u0027thinking\u0027.",
+      "id": "Philo(11)",
+      "state": "thinking",
+      "payload": "null",
+      "isEntry": true,
+      "clock": {
+        "Philo(11)": 13
+      }
+    }
+  },
+  {
+    "type": "SendEvent",
+    "details": {
+      "log": "\u0027Philo(11)\u0027 in state \u0027thinking\u0027 sent event \u0027eAcquireFork with payload (\u003Cphilo:\u003Cid:4, left:\u003Cid:4, m:Fork(6), \u003E, right:\u003Cid:0, m:Fork(2), \u003E, isException:False, m:Philo(11), \u003E, fork:\u003Cid:4, m:Fork(6), \u003E, \u003E)\u0027 to \u0027Fork(6)\u0027.",
+      "event": "eAcquireFork",
+      "state": "thinking",
+      "payload": {
+        "philo": {
+          "id": 4,
+          "left": {
+            "id": 4,
+            "m": "Fork(6)"
+          },
+          "right": {
+            "id": 0,
+            "m": "Fork(2)"
+          },
+          "isException": false,
+          "m": "Philo(11)"
+        },
+        "fork": {
+          "id": 4,
+          "m": "Fork(6)"
+        }
+      },
+      "sender": "Philo(11)",
+      "target": "Fork(6)",
+      "isTargetHalted": false,
+      "clock": {
+        "Philo(11)": 14
+      }
+    }
+  },
+  {
+    "type": "DequeueEvent",
+    "details": {
+      "log": "\u0027Fork(4)\u0027 dequeued event \u0027eAcquireFork with payload (\u003Cphilo:\u003Cid:2, left:\u003Cid:2, m:Fork(4), \u003E, right:\u003Cid:3, m:Fork(5), \u003E, isException:False, m:Philo(9), \u003E, fork:\u003Cid:2, m:Fork(4), \u003E, \u003E)\u0027 in state \u0027available\u0027.",
+      "id": "Fork(4)",
+      "event": "eAcquireFork",
+      "state": "available",
+      "payload": {
+        "philo": {
+          "id": 2,
+          "left": {
+            "id": 2,
+            "m": "Fork(4)"
+          },
+          "right": {
+            "id": 3,
+            "m": "Fork(5)"
+          },
+          "isException": false,
+          "m": "Philo(9)"
+        },
+        "fork": {
+          "id": 2,
+          "m": "Fork(4)"
+        }
+      },
+      "clock": {
+        "Fork(4)": 6,
+        "Philo(9)": 14
+      }
+    }
+  },
+  {
+    "type": "Print",
+    "details": {
+      "log": "Philosopher 2 GOT fork 2",
+      "payload": "null"
+    }
+  },
+  {
+    "type": "MonitorProcessEvent",
+    "details": {
+      "log": "DeadlockDetection is processing event \u0027eForkAcquired\u0027 in state \u0027Monitoring\u0027.",
+      "event": "eForkAcquired",
+      "state": "Monitoring",
+      "payload": "null",
+      "sender": "Fork(4)",
+      "monitor": "DeadlockDetection",
+      "clock": {
+        "DeadlockDetection": 7,
+        "Philo(7)": 8,
+        "Philo(8)": 8,
+        "Philo(9)": 14,
+        "Philo(11)": 8,
+        "Fork(4)": 6
+      }
+    }
+  },
+  {
+    "type": "Print",
+    "details": {
+      "log": "Total fork acquisitions: 1",
+      "payload": "null"
+    }
+  },
+  {
+    "type": "StateTransition",
+    "details": {
+      "log": "Philo(10) enters state \u0027Init\u0027.",
+      "id": "Philo(10)",
+      "state": "Init",
+      "payload": "null",
+      "isEntry": true,
+      "clock": {
+        "Philo(10)": 2
+      }
+    }
+  },
+  {
+    "type": "Print",
+    "details": {
+      "log": "Philosopher 3: left 3 and right 4",
+      "payload": "null"
+    }
+  },
+  {
+    "type": "GotoState",
+    "details": {
+      "log": "Philo(10) is transitioning from state \u0027Init\u0027 to state \u0027thinking\u0027.",
+      "id": "Philo(10)",
+      "startState": "Init",
+      "endState": "thinking",
+      "payload": "null",
+      "clock": {
+        "Philo(10)": 3
+      }
+    }
+  },
+  {
+    "type": "StateTransition",
+    "details": {
+      "log": "Philo(10) exits state \u0027Init\u0027.",
+      "id": "Philo(10)",
+      "state": "Init",
+      "payload": "null",
+      "isEntry": false,
+      "clock": {
+        "Philo(10)": 4
+      }
+    }
+  },
+  {
+    "type": "StateTransition",
+    "details": {
+      "log": "Philo(10) enters state \u0027thinking\u0027.",
+      "id": "Philo(10)",
+      "state": "thinking",
+      "payload": "null",
+      "isEntry": true,
+      "clock": {
+        "Philo(10)": 5
+      }
+    }
+  },
+  {
+    "type": "GotoState",
+    "details": {
+      "log": "Philo(10) is transitioning from state \u0027thinking\u0027 to state \u0027philoReady\u0027.",
+      "id": "Philo(10)",
+      "startState": "thinking",
+      "endState": "philoReady",
+      "payload": "null",
+      "clock": {
+        "Philo(10)": 6
+      }
+    }
+  },
+  {
+    "type": "StateTransition",
+    "details": {
+      "log": "Philo(10) exits state \u0027thinking\u0027.",
+      "id": "Philo(10)",
+      "state": "thinking",
+      "payload": "null",
+      "isEntry": false,
+      "clock": {
+        "Philo(10)": 7
+      }
+    }
+  },
+  {
+    "type": "StateTransition",
+    "details": {
+      "log": "Philo(10) enters state \u0027philoReady\u0027.",
+      "id": "Philo(10)",
+      "state": "philoReady",
+      "payload": "null",
+      "isEntry": true,
+      "clock": {
+        "Philo(10)": 8
+      }
+    }
+  },
+  {
+    "type": "Print",
+    "details": {
+      "log": "Philosopher 3 is READY",
+      "payload": "null"
+    }
+  },
+  {
+    "type": "MonitorProcessEvent",
+    "details": {
+      "log": "DeadlockDetection is processing event \u0027ePhiloReady\u0027 in state \u0027Monitoring\u0027.",
+      "event": "ePhiloReady",
+      "state": "Monitoring",
+      "payload": "null",
+      "sender": "Philo(10)",
+      "monitor": "DeadlockDetection",
+      "clock": {
+        "DeadlockDetection": 8,
+        "Philo(7)": 8,
+        "Philo(8)": 8,
+        "Philo(9)": 14,
+        "Philo(11)": 8,
+        "Fork(4)": 6,
+        "Philo(10)": 8
+      }
+    }
+  },
+  {
+    "type": "DequeueEvent",
+    "details": {
+      "log": "\u0027Philo(8)\u0027 dequeued event \u0027ePhiloReady\u0027 in state \u0027philoReady\u0027.",
+      "id": "Philo(8)",
+      "event": "ePhiloReady",
+      "state": "philoReady",
+      "payload": "null",
+      "clock": {
+        "Philo(8)": 10
+      }
+    }
+  },
+  {
+    "type": "GotoState",
+    "details": {
+      "log": "Philo(8) is transitioning from state \u0027philoReady\u0027 to state \u0027thinking\u0027.",
+      "id": "Philo(8)",
+      "startState": "philoReady",
+      "endState": "thinking",
+      "payload": "null",
+      "clock": {
+        "Philo(8)": 11
+      }
+    }
+  },
+  {
+    "type": "StateTransition",
+    "details": {
+      "log": "Philo(8) exits state \u0027philoReady\u0027.",
+      "id": "Philo(8)",
+      "state": "philoReady",
+      "payload": "null",
+      "isEntry": false,
+      "clock": {
+        "Philo(8)": 12
+      }
+    }
+  },
+  {
+    "type": "StateTransition",
+    "details": {
+      "log": "Philo(8) enters state \u0027thinking\u0027.",
+      "id": "Philo(8)",
+      "state": "thinking",
+      "payload": "null",
+      "isEntry": true,
+      "clock": {
+        "Philo(8)": 13
+      }
+    }
+  },
+  {
+    "type": "SendEvent",
+    "details": {
+      "log": "\u0027Fork(4)\u0027 in state \u0027available\u0027 sent event \u0027eForkAcquired\u0027 to \u0027Philo(9)\u0027.",
+      "event": "eForkAcquired",
+      "state": "available",
+      "payload": "null",
+      "sender": "Fork(4)",
+      "target": "Philo(9)",
+      "isTargetHalted": false,
+      "clock": {
+        "Fork(4)": 7,
+        "Philo(9)": 14
+      }
+    }
+  },
+  {
+    "type": "GotoState",
+    "details": {
+      "log": "Fork(4) is transitioning from state \u0027available\u0027 to state \u0027taken\u0027.",
+      "id": "Fork(4)",
+      "startState": "available",
+      "endState": "taken",
+      "payload": "null",
+      "clock": {
+        "Fork(4)": 8,
+        "Philo(9)": 14
+      }
+    }
+  },
+  {
+    "type": "StateTransition",
+    "details": {
+      "log": "Fork(4) exits state \u0027available\u0027.",
+      "id": "Fork(4)",
+      "state": "available",
+      "payload": "null",
+      "isEntry": false,
+      "clock": {
+        "Fork(4)": 9,
+        "Philo(9)": 14
+      }
+    }
+  },
+  {
+    "type": "StateTransition",
+    "details": {
+      "log": "Fork(4) enters state \u0027taken\u0027.",
+      "id": "Fork(4)",
+      "state": "taken",
+      "payload": "null",
+      "isEntry": true,
+      "clock": {
+        "Fork(4)": 10,
+        "Philo(9)": 14
+      }
+    }
+  },
+  {
+    "type": "SendEvent",
+    "details": {
+      "log": "\u0027Philo(8)\u0027 in state \u0027thinking\u0027 sent event \u0027eAcquireFork with payload (\u003Cphilo:\u003Cid:1, left:\u003Cid:1, m:Fork(3), \u003E, right:\u003Cid:2, m:Fork(4), \u003E, isException:False, m:Philo(8), \u003E, fork:\u003Cid:1, m:Fork(3), \u003E, \u003E)\u0027 to \u0027Fork(3)\u0027.",
+      "event": "eAcquireFork",
+      "state": "thinking",
+      "payload": {
+        "philo": {
+          "id": 1,
+          "left": {
+            "id": 1,
+            "m": "Fork(3)"
+          },
+          "right": {
+            "id": 2,
+            "m": "Fork(4)"
+          },
+          "isException": false,
+          "m": "Philo(8)"
+        },
+        "fork": {
+          "id": 1,
+          "m": "Fork(3)"
+        }
+      },
+      "sender": "Philo(8)",
+      "target": "Fork(3)",
+      "isTargetHalted": false,
+      "clock": {
+        "Philo(8)": 14
+      }
+    }
+  },
+  {
+    "type": "SendEvent",
+    "details": {
+      "log": "\u0027Philo(7)\u0027 in state \u0027thinking\u0027 sent event \u0027eAcquireFork with payload (\u003Cphilo:\u003Cid:0, left:\u003Cid:0, m:Fork(2), \u003E, right:\u003Cid:1, m:Fork(3), \u003E, isException:False, m:Philo(7), \u003E, fork:\u003Cid:0, m:Fork(2), \u003E, \u003E)\u0027 to \u0027Fork(2)\u0027.",
+      "event": "eAcquireFork",
+      "state": "thinking",
+      "payload": {
+        "philo": {
+          "id": 0,
+          "left": {
+            "id": 0,
+            "m": "Fork(2)"
+          },
+          "right": {
+            "id": 1,
+            "m": "Fork(3)"
+          },
+          "isException": false,
+          "m": "Philo(7)"
+        },
+        "fork": {
+          "id": 0,
+          "m": "Fork(2)"
+        }
+      },
+      "sender": "Philo(7)",
+      "target": "Fork(2)",
+      "isTargetHalted": false,
+      "clock": {
+        "Philo(7)": 14
+      }
+    }
+  },
+  {
+    "type": "DequeueEvent",
+    "details": {
+      "log": "\u0027Fork(3)\u0027 dequeued event \u0027eAcquireFork with payload (\u003Cphilo:\u003Cid:1, left:\u003Cid:1, m:Fork(3), \u003E, right:\u003Cid:2, m:Fork(4), \u003E, isException:False, m:Philo(8), \u003E, fork:\u003Cid:1, m:Fork(3), \u003E, \u003E)\u0027 in state \u0027available\u0027.",
+      "id": "Fork(3)",
+      "event": "eAcquireFork",
+      "state": "available",
+      "payload": {
+        "philo": {
+          "id": 1,
+          "left": {
+            "id": 1,
+            "m": "Fork(3)"
+          },
+          "right": {
+            "id": 2,
+            "m": "Fork(4)"
+          },
+          "isException": false,
+          "m": "Philo(8)"
+        },
+        "fork": {
+          "id": 1,
+          "m": "Fork(3)"
+        }
+      },
+      "clock": {
+        "Fork(3)": 6,
+        "Philo(8)": 14
+      }
+    }
+  },
+  {
+    "type": "Print",
+    "details": {
+      "log": "Philosopher 1 GOT fork 1",
+      "payload": "null"
+    }
+  },
+  {
+    "type": "MonitorProcessEvent",
+    "details": {
+      "log": "DeadlockDetection is processing event \u0027eForkAcquired\u0027 in state \u0027Monitoring\u0027.",
+      "event": "eForkAcquired",
+      "state": "Monitoring",
+      "payload": "null",
+      "sender": "Fork(3)",
+      "monitor": "DeadlockDetection",
+      "clock": {
+        "DeadlockDetection": 9,
+        "Philo(7)": 8,
+        "Philo(8)": 14,
+        "Philo(9)": 14,
+        "Philo(11)": 8,
+        "Fork(4)": 6,
+        "Philo(10)": 8,
+        "Fork(3)": 6
+      }
+    }
+  },
+  {
+    "type": "Print",
+    "details": {
+      "log": "Total fork acquisitions: 2",
+      "payload": "null"
+    }
+  },
+  {
+    "type": "SendEvent",
+    "details": {
+      "log": "\u0027Philo(10)\u0027 in state \u0027philoReady\u0027 sent event \u0027ePhiloReady\u0027 to \u0027Philo(10)\u0027.",
+      "event": "ePhiloReady",
+      "state": "philoReady",
+      "payload": "null",
+      "sender": "Philo(10)",
+      "target": "Philo(10)",
+      "isTargetHalted": false,
+      "clock": {
+        "Philo(10)": 9
+      }
+    }
+  },
+  {
+    "type": "DequeueEvent",
+    "details": {
+      "log": "\u0027Philo(9)\u0027 dequeued event \u0027eForkAcquired\u0027 in state \u0027thinking\u0027.",
+      "id": "Philo(9)",
+      "event": "eForkAcquired",
+      "state": "thinking",
+      "payload": "null",
+      "clock": {
+        "Philo(9)": 15,
+        "Fork(4)": 7
+      }
+    }
+  },
+  {
+    "type": "SendEvent",
+    "details": {
+      "log": "\u0027Fork(3)\u0027 in state \u0027available\u0027 sent event \u0027eForkAcquired\u0027 to \u0027Philo(8)\u0027.",
+      "event": "eForkAcquired",
+      "state": "available",
+      "payload": "null",
+      "sender": "Fork(3)",
+      "target": "Philo(8)",
+      "isTargetHalted": false,
+      "clock": {
+        "Fork(3)": 7,
+        "Philo(8)": 14
+      }
     }
   },
   {
@@ -1943,7 +1735,7 @@
       "payload": "null",
       "clock": {
         "Fork(3)": 8,
-        "Philo(10)": 6
+        "Philo(8)": 14
       }
     }
   },
@@ -1957,7 +1749,7 @@
       "isEntry": false,
       "clock": {
         "Fork(3)": 9,
-        "Philo(10)": 6
+        "Philo(8)": 14
       }
     }
   },
@@ -1971,107 +1763,265 @@
       "isEntry": true,
       "clock": {
         "Fork(3)": 10,
-        "Philo(10)": 6
-      }
-    }
-  },
-  {
-    "type": "SendEvent",
-    "details": {
-      "log": "\u0027Philo(11)\u0027 in state \u0027thinking\u0027 sent event \u0027eAcquireFork with payload (\u003Cphilosopher:Philo(11), philo_id:4, \u003E)\u0027 to \u0027Fork(2)\u0027.",
-      "event": "eAcquireFork",
-      "state": "thinking",
-      "payload": {
-        "philosopher": "Philo(11)",
-        "philo_id": 4
-      },
-      "sender": "Philo(11)",
-      "target": "Fork(2)",
-      "isTargetHalted": false,
-      "clock": {
-        "Philo(11)": 6
-      }
-    }
-  },
-  {
-    "type": "SendEvent",
-    "details": {
-      "log": "\u0027Philo(8)\u0027 in state \u0027thinking\u0027 sent event \u0027eAcquireFork with payload (\u003Cphilosopher:Philo(8), philo_id:1, \u003E)\u0027 to \u0027Fork(4)\u0027.",
-      "event": "eAcquireFork",
-      "state": "thinking",
-      "payload": {
-        "philosopher": "Philo(8)",
-        "philo_id": 1
-      },
-      "sender": "Philo(8)",
-      "target": "Fork(4)",
-      "isTargetHalted": false,
-      "clock": {
-        "Philo(8)": 8,
-        "Fork(5)": 12,
-        "Philo(7)": 8,
-        "Fork(6)": 7
+        "Philo(8)": 14
       }
     }
   },
   {
     "type": "DequeueEvent",
     "details": {
-      "log": "\u0027Philo(7)\u0027 dequeued event \u0027eForkAcquired\u0027 in state \u0027thinking\u0027.",
-      "id": "Philo(7)",
-      "event": "eForkAcquired",
-      "state": "thinking",
-      "payload": "null",
+      "log": "\u0027Fork(6)\u0027 dequeued event \u0027eAcquireFork with payload (\u003Cphilo:\u003Cid:4, left:\u003Cid:4, m:Fork(6), \u003E, right:\u003Cid:0, m:Fork(2), \u003E, isException:False, m:Philo(11), \u003E, fork:\u003Cid:4, m:Fork(6), \u003E, \u003E)\u0027 in state \u0027available\u0027.",
+      "id": "Fork(6)",
+      "event": "eAcquireFork",
+      "state": "available",
+      "payload": {
+        "philo": {
+          "id": 4,
+          "left": {
+            "id": 4,
+            "m": "Fork(6)"
+          },
+          "right": {
+            "id": 0,
+            "m": "Fork(2)"
+          },
+          "isException": false,
+          "m": "Philo(11)"
+        },
+        "fork": {
+          "id": 4,
+          "m": "Fork(6)"
+        }
+      },
       "clock": {
-        "Philo(7)": 19,
-        "Fork(6)": 16,
-        "Fork(5)": 7
+        "Fork(6)": 6,
+        "Philo(11)": 14
       }
     }
   },
   {
     "type": "Print",
     "details": {
-      "log": "Philosopher 0 is GOT his left fork 0, now trying for right fork 1",
+      "log": "Philosopher 4 GOT fork 4",
+      "payload": "null"
+    }
+  },
+  {
+    "type": "MonitorProcessEvent",
+    "details": {
+      "log": "DeadlockDetection is processing event \u0027eForkAcquired\u0027 in state \u0027Monitoring\u0027.",
+      "event": "eForkAcquired",
+      "state": "Monitoring",
+      "payload": "null",
+      "sender": "Fork(6)",
+      "monitor": "DeadlockDetection",
+      "clock": {
+        "DeadlockDetection": 10,
+        "Philo(7)": 8,
+        "Philo(8)": 14,
+        "Philo(9)": 14,
+        "Philo(11)": 14,
+        "Fork(4)": 6,
+        "Philo(10)": 8,
+        "Fork(3)": 6,
+        "Fork(6)": 6
+      }
+    }
+  },
+  {
+    "type": "Print",
+    "details": {
+      "log": "Total fork acquisitions: 3",
       "payload": "null"
     }
   },
   {
     "type": "DequeueEvent",
     "details": {
-      "log": "\u0027Philo(10)\u0027 dequeued event \u0027eForkAcquired\u0027 in state \u0027thinking\u0027.",
-      "id": "Philo(10)",
+      "log": "\u0027Philo(8)\u0027 dequeued event \u0027eForkAcquired\u0027 in state \u0027thinking\u0027.",
+      "id": "Philo(8)",
       "event": "eForkAcquired",
       "state": "thinking",
       "payload": "null",
       "clock": {
-        "Philo(10)": 7,
+        "Philo(8)": 15,
         "Fork(3)": 7
       }
     }
   },
   {
-    "type": "Print",
+    "type": "DequeueEvent",
     "details": {
-      "log": "Philosopher 3 is GOT his left fork 3, now trying for right fork 4",
-      "payload": "null"
+      "log": "\u0027Philo(10)\u0027 dequeued event \u0027ePhiloReady\u0027 in state \u0027philoReady\u0027.",
+      "id": "Philo(10)",
+      "event": "ePhiloReady",
+      "state": "philoReady",
+      "payload": "null",
+      "clock": {
+        "Philo(10)": 10
+      }
+    }
+  },
+  {
+    "type": "GotoState",
+    "details": {
+      "log": "Philo(10) is transitioning from state \u0027philoReady\u0027 to state \u0027thinking\u0027.",
+      "id": "Philo(10)",
+      "startState": "philoReady",
+      "endState": "thinking",
+      "payload": "null",
+      "clock": {
+        "Philo(10)": 11
+      }
+    }
+  },
+  {
+    "type": "StateTransition",
+    "details": {
+      "log": "Philo(10) exits state \u0027philoReady\u0027.",
+      "id": "Philo(10)",
+      "state": "philoReady",
+      "payload": "null",
+      "isEntry": false,
+      "clock": {
+        "Philo(10)": 12
+      }
+    }
+  },
+  {
+    "type": "StateTransition",
+    "details": {
+      "log": "Philo(10) enters state \u0027thinking\u0027.",
+      "id": "Philo(10)",
+      "state": "thinking",
+      "payload": "null",
+      "isEntry": true,
+      "clock": {
+        "Philo(10)": 13
+      }
+    }
+  },
+  {
+    "type": "SendEvent",
+    "details": {
+      "log": "\u0027Fork(6)\u0027 in state \u0027available\u0027 sent event \u0027eForkAcquired\u0027 to \u0027Philo(11)\u0027.",
+      "event": "eForkAcquired",
+      "state": "available",
+      "payload": "null",
+      "sender": "Fork(6)",
+      "target": "Philo(11)",
+      "isTargetHalted": false,
+      "clock": {
+        "Fork(6)": 7,
+        "Philo(11)": 14
+      }
+    }
+  },
+  {
+    "type": "GotoState",
+    "details": {
+      "log": "Fork(6) is transitioning from state \u0027available\u0027 to state \u0027taken\u0027.",
+      "id": "Fork(6)",
+      "startState": "available",
+      "endState": "taken",
+      "payload": "null",
+      "clock": {
+        "Fork(6)": 8,
+        "Philo(11)": 14
+      }
+    }
+  },
+  {
+    "type": "StateTransition",
+    "details": {
+      "log": "Fork(6) exits state \u0027available\u0027.",
+      "id": "Fork(6)",
+      "state": "available",
+      "payload": "null",
+      "isEntry": false,
+      "clock": {
+        "Fork(6)": 9,
+        "Philo(11)": 14
+      }
+    }
+  },
+  {
+    "type": "StateTransition",
+    "details": {
+      "log": "Fork(6) enters state \u0027taken\u0027.",
+      "id": "Fork(6)",
+      "state": "taken",
+      "payload": "null",
+      "isEntry": true,
+      "clock": {
+        "Fork(6)": 10,
+        "Philo(11)": 14
+      }
+    }
+  },
+  {
+    "type": "SendEvent",
+    "details": {
+      "log": "\u0027Philo(9)\u0027 in state \u0027thinking\u0027 sent event \u0027eAcquireFork with payload (\u003Cphilo:\u003Cid:2, left:\u003Cid:2, m:Fork(4), \u003E, right:\u003Cid:3, m:Fork(5), \u003E, isException:False, m:Philo(9), \u003E, fork:\u003Cid:3, m:Fork(5), \u003E, \u003E)\u0027 to \u0027Fork(5)\u0027.",
+      "event": "eAcquireFork",
+      "state": "thinking",
+      "payload": {
+        "philo": {
+          "id": 2,
+          "left": {
+            "id": 2,
+            "m": "Fork(4)"
+          },
+          "right": {
+            "id": 3,
+            "m": "Fork(5)"
+          },
+          "isException": false,
+          "m": "Philo(9)"
+        },
+        "fork": {
+          "id": 3,
+          "m": "Fork(5)"
+        }
+      },
+      "sender": "Philo(9)",
+      "target": "Fork(5)",
+      "isTargetHalted": false,
+      "clock": {
+        "Philo(9)": 16,
+        "Fork(4)": 7
+      }
     }
   },
   {
     "type": "DequeueEvent",
     "details": {
-      "log": "\u0027Fork(3)\u0027 dequeued event \u0027eAcquireFork with payload (\u003Cphilosopher:Philo(9), philo_id:2, \u003E)\u0027 in state \u0027taken\u0027.",
-      "id": "Fork(3)",
+      "log": "\u0027Fork(5)\u0027 dequeued event \u0027eAcquireFork with payload (\u003Cphilo:\u003Cid:2, left:\u003Cid:2, m:Fork(4), \u003E, right:\u003Cid:3, m:Fork(5), \u003E, isException:False, m:Philo(9), \u003E, fork:\u003Cid:3, m:Fork(5), \u003E, \u003E)\u0027 in state \u0027available\u0027.",
+      "id": "Fork(5)",
       "event": "eAcquireFork",
-      "state": "taken",
+      "state": "available",
       "payload": {
-        "philosopher": "Philo(9)",
-        "philo_id": 2
+        "philo": {
+          "id": 2,
+          "left": {
+            "id": 2,
+            "m": "Fork(4)"
+          },
+          "right": {
+            "id": 3,
+            "m": "Fork(5)"
+          },
+          "isException": false,
+          "m": "Philo(9)"
+        },
+        "fork": {
+          "id": 3,
+          "m": "Fork(5)"
+        }
       },
       "clock": {
-        "Fork(3)": 11,
-        "Philo(10)": 6,
-        "Philo(9)": 8,
+        "Fork(5)": 6,
+        "Philo(9)": 16,
         "Fork(4)": 7
       }
     }
@@ -2079,66 +2029,8 @@
   {
     "type": "Print",
     "details": {
-      "log": "Fork 1 is busy by philosopher 3, philosopher 2 cannot acquire it",
+      "log": "Philosopher 2 GOT fork 3",
       "payload": "null"
-    }
-  },
-  {
-    "type": "SendEvent",
-    "details": {
-      "log": "\u0027Philo(10)\u0027 in state \u0027thinking\u0027 sent event \u0027eAcquireFork with payload (\u003Cphilosopher:Philo(10), philo_id:3, \u003E)\u0027 to \u0027Fork(2)\u0027.",
-      "event": "eAcquireFork",
-      "state": "thinking",
-      "payload": {
-        "philosopher": "Philo(10)",
-        "philo_id": 3
-      },
-      "sender": "Philo(10)",
-      "target": "Fork(2)",
-      "isTargetHalted": false,
-      "clock": {
-        "Philo(10)": 8,
-        "Fork(3)": 7
-      }
-    }
-  },
-  {
-    "type": "SendEvent",
-    "details": {
-      "log": "\u0027Philo(7)\u0027 in state \u0027thinking\u0027 sent event \u0027eAcquireFork with payload (\u003Cphilosopher:Philo(7), philo_id:0, \u003E)\u0027 to \u0027Fork(5)\u0027.",
-      "event": "eAcquireFork",
-      "state": "thinking",
-      "payload": {
-        "philosopher": "Philo(7)",
-        "philo_id": 0
-      },
-      "sender": "Philo(7)",
-      "target": "Fork(5)",
-      "isTargetHalted": false,
-      "clock": {
-        "Philo(7)": 20,
-        "Fork(6)": 16,
-        "Fork(5)": 7
-      }
-    }
-  },
-  {
-    "type": "DequeueEvent",
-    "details": {
-      "log": "\u0027Fork(5)\u0027 dequeued event \u0027eAcquireFork with payload (\u003Cphilosopher:Philo(7), philo_id:0, \u003E)\u0027 in state \u0027available\u0027.",
-      "id": "Fork(5)",
-      "event": "eAcquireFork",
-      "state": "available",
-      "payload": {
-        "philosopher": "Philo(7)",
-        "philo_id": 0
-      },
-      "clock": {
-        "Fork(5)": 17,
-        "Philo(7)": 20,
-        "Fork(6)": 16,
-        "Philo(8)": 6
-      }
     }
   },
   {
@@ -2151,15 +2043,16 @@
       "sender": "Fork(5)",
       "monitor": "DeadlockDetection",
       "clock": {
-        "DeadlockDetection": 10,
-        "Fork(6)": 16,
-        "Philo(7)": 20,
-        "Fork(4)": 6,
-        "Philo(9)": 6,
+        "DeadlockDetection": 11,
+        "Philo(7)": 8,
+        "Philo(8)": 14,
+        "Philo(9)": 16,
+        "Philo(11)": 14,
+        "Fork(4)": 7,
+        "Philo(10)": 8,
         "Fork(3)": 6,
-        "Philo(10)": 6,
-        "Fork(5)": 17,
-        "Philo(8)": 6
+        "Fork(6)": 6,
+        "Fork(5)": 6
       }
     }
   },
@@ -2173,18 +2066,40 @@
   {
     "type": "DequeueEvent",
     "details": {
-      "log": "\u0027Fork(2)\u0027 dequeued event \u0027eAcquireFork with payload (\u003Cphilosopher:Philo(11), philo_id:4, \u003E)\u0027 in state \u0027available\u0027.",
+      "log": "\u0027Fork(2)\u0027 dequeued event \u0027eAcquireFork with payload (\u003Cphilo:\u003Cid:0, left:\u003Cid:0, m:Fork(2), \u003E, right:\u003Cid:1, m:Fork(3), \u003E, isException:False, m:Philo(7), \u003E, fork:\u003Cid:0, m:Fork(2), \u003E, \u003E)\u0027 in state \u0027available\u0027.",
       "id": "Fork(2)",
       "event": "eAcquireFork",
       "state": "available",
       "payload": {
-        "philosopher": "Philo(11)",
-        "philo_id": 4
+        "philo": {
+          "id": 0,
+          "left": {
+            "id": 0,
+            "m": "Fork(2)"
+          },
+          "right": {
+            "id": 1,
+            "m": "Fork(3)"
+          },
+          "isException": false,
+          "m": "Philo(7)"
+        },
+        "fork": {
+          "id": 0,
+          "m": "Fork(2)"
+        }
       },
       "clock": {
         "Fork(2)": 6,
-        "Philo(11)": 6
+        "Philo(7)": 14
       }
+    }
+  },
+  {
+    "type": "Print",
+    "details": {
+      "log": "Philosopher 0 GOT fork 0",
+      "payload": "null"
     }
   },
   {
@@ -2197,17 +2112,17 @@
       "sender": "Fork(2)",
       "monitor": "DeadlockDetection",
       "clock": {
-        "DeadlockDetection": 11,
-        "Fork(6)": 16,
-        "Philo(7)": 20,
-        "Fork(4)": 6,
-        "Philo(9)": 6,
+        "DeadlockDetection": 12,
+        "Philo(7)": 14,
+        "Philo(8)": 14,
+        "Philo(9)": 16,
+        "Philo(11)": 14,
+        "Fork(4)": 7,
+        "Philo(10)": 8,
         "Fork(3)": 6,
-        "Philo(10)": 6,
-        "Fork(5)": 17,
-        "Philo(8)": 6,
-        "Fork(2)": 6,
-        "Philo(11)": 6
+        "Fork(6)": 6,
+        "Fork(5)": 6,
+        "Fork(2)": 6
       }
     }
   },
@@ -2221,8 +2136,8 @@
   {
     "type": "AssertionFailure",
     "details": {
-      "log": "Assertion Failed: PSpec\\Lock.p:14:13 Too many fork acquisitions, potential deadlock",
-      "error": "Assertion Failed: PSpec\\Lock.p:14:13 Too many fork acquisitions, potential deadlock",
+      "log": "Assertion Failed: PSpec\\Lock.p:30:18 Too many fork acquisitions, potential deadlock",
+      "error": "Assertion Failed: PSpec\\Lock.p:30:18 Too many fork acquisitions, potential deadlock",
       "payload": "null"
     }
   },
@@ -2232,7 +2147,7 @@
       "log": "Found bug using \u0027random\u0027 strategy.",
       "payload": "null",
       "strategy": "random",
-      "strategyDescription": "random[seed \u00272284687467\u0027]"
+      "strategyDescription": "random[seed \u0027763843832\u0027]"
     }
   }
 ]
